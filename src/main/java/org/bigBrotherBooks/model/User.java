@@ -4,8 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -32,16 +32,16 @@ public class User {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
-    private List<Integer> favoriteBooks;
+    private Set<Integer> favoriteBooks;
 
-    private List<Integer> favoriteAuthors;
+    private Set<Integer> favoriteAuthors;
 
-    private List<String> followingUsers;
+    private Set<String> followingUsers;
 
     public User() {
-        favoriteBooks = new ArrayList<>();
-        favoriteAuthors = new ArrayList<>();
-        followingUsers = new ArrayList<>();
+        favoriteBooks = new HashSet<>();
+        favoriteAuthors = new HashSet<>();
+        followingUsers = new HashSet<>();
     }
 
     public String getUserName() {
@@ -100,11 +100,11 @@ public class User {
         isAdmin = admin;
     }
 
-    public List<Integer> getFavoriteBooks() {
+    public Set<Integer> getFavoriteBooks() {
         return favoriteBooks;
     }
 
-    public void setFavoriteBooks(List<Integer> favoriteBooks) {
+    public void setFavoriteBooks(Set<Integer> favoriteBooks) {
         this.favoriteBooks = favoriteBooks;
     }
 
@@ -112,11 +112,15 @@ public class User {
         favoriteBooks.add(bookId);
     }
 
-    public List<Integer> getFavoriteAuthors() {
+    public void removeFavoriteBook(int bookId) {
+        favoriteBooks.remove(bookId);
+    }
+
+    public Set<Integer> getFavoriteAuthors() {
         return favoriteAuthors;
     }
 
-    public void setFavoriteAuthors(List<Integer> favoriteAuthors) {
+    public void setFavoriteAuthors(Set<Integer> favoriteAuthors) {
         this.favoriteAuthors = favoriteAuthors;
     }
 
@@ -124,16 +128,24 @@ public class User {
         favoriteAuthors.add(authorId);
     }
 
-    public List<String> getFollowingUsers() {
+    public void removeFavoriteAuthor(int authorId) {
+        favoriteAuthors.remove(authorId);
+    }
+
+    public Set<String> getFollowingUsers() {
         return followingUsers;
     }
 
-    public void setFollowingUsers(List<String> followingUsers) {
+    public void setFollowingUsers(Set<String> followingUsers) {
         this.followingUsers = followingUsers;
     }
 
     public void followUser(String username) {
         followingUsers.add(username);
+    }
+
+    public void unfollowUser(String username) {
+        followingUsers.remove(username);
     }
 
     @Override

@@ -6,19 +6,19 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.bigBrotherBooks.model.Author;
 import org.bigBrotherBooks.model.Book;
-import org.bigBrotherBooks.service.AuthorUtils;
-import org.bigBrotherBooks.service.BookUtils;
+import org.bigBrotherBooks.service.AuthorService;
+import org.bigBrotherBooks.service.BookService;
 
 @Path("/resource")
 public class ResourceRestApi {
 
-    private AuthorUtils authorUtils;
-    private BookUtils bookUtils;
+    private AuthorService authorService;
+    private BookService bookService;
 
     @Inject
-    ResourceRestApi( AuthorUtils authorUtils, BookUtils bookUtils){
-        this.authorUtils = authorUtils;
-        this.bookUtils = bookUtils;
+    ResourceRestApi(AuthorService authorService, BookService bookService){
+        this.authorService = authorService;
+        this.bookService = bookService;
     }
 
     // author endpoints
@@ -27,8 +27,8 @@ public class ResourceRestApi {
     @Path("/save/author")
     @Produces(MediaType.TEXT_PLAIN)
     public String saveAuthor() {
-        Author author = authorUtils.getDummyAuthor();
-        authorUtils.saveAuthor(author);
+        Author author = authorService.getDummyAuthor();
+        authorService.saveAuthor(author);
         return "Author Saved Successfully";
     }
 
@@ -36,7 +36,7 @@ public class ResourceRestApi {
     @Path("/get/author/{id}")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getAuthor(@PathParam("id") int authorId) {
-        Author author = authorUtils.getAuthor(authorId);
+        Author author = authorService.getAuthor(authorId);
         return Response.ok(author).build();
     }
 
@@ -44,7 +44,7 @@ public class ResourceRestApi {
     @Path("/delete/author/{id}")
     @Produces(MediaType.TEXT_PLAIN)
     public String deleteAuthor(@PathParam("id") int authorId) {
-        if(authorUtils.deleteAuthor(authorId))
+        if(authorService.deleteAuthor(authorId))
             return "Author Deleted Successfully";
         return "Author not found";
     }
@@ -55,8 +55,8 @@ public class ResourceRestApi {
     @Path("/save/book")
     @Produces(MediaType.TEXT_PLAIN)
     public String saveBook() {
-        Book book = bookUtils.getDummyBook();
-        bookUtils.saveBook(book);
+        Book book = bookService.getDummyBook();
+        bookService.saveBook(book);
         return "Book Saved Successfully";
     }
 
@@ -64,7 +64,7 @@ public class ResourceRestApi {
     @Path("/get/book/{id}")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getBook(@PathParam("id") int bookId) {
-        Book book = bookUtils.getBook(bookId);
+        Book book = bookService.getBook(bookId);
         return Response.ok(book).build();
     }
 
@@ -72,7 +72,7 @@ public class ResourceRestApi {
     @Path("/delete/book/{id}")
     @Produces(MediaType.TEXT_PLAIN)
     public String deleteBook(@PathParam("id") int bookId) {
-        if (bookUtils.deleteBook(bookId))
+        if (bookService.deleteBook(bookId))
             return "Book Deleted Successfully";
         return "Book not found";
     }

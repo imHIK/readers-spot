@@ -9,15 +9,15 @@ import org.bigBrotherBooks.model.BookDetails;
 import java.util.List;
 
 @Singleton
-public class BookUtils {
+public class BookService {
 
     private BookRepository bookRepo;
-    private AuthorUtils authorUtils;
+    private AuthorService authorService;
 
     @Inject
-    public BookUtils(BookRepository bookRepo, AuthorUtils authorUtils) {
+    public BookService(BookRepository bookRepo, AuthorService authorService) {
         this.bookRepo = bookRepo;
-        this.authorUtils = authorUtils;
+        this.authorService = authorService;
     }
 
     public void saveBook(Book book){
@@ -33,7 +33,7 @@ public class BookUtils {
         if (book == null) {
             return null;
         }
-        Author author = authorUtils.getAuthor(book.getAuthorId());
+        Author author = authorService.getAuthor(book.getAuthorId());
         return new BookDetails(book, author);
     }
 

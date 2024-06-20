@@ -2,15 +2,16 @@ package org.bigBrotherBooks.service;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import org.bigBrotherBooks.dto.UserProfileUpdateDTO;
 import org.bigBrotherBooks.model.User;
 
 @Singleton
-public class UserUtils {
+public class UserService {
 
     private UserRepository userRepo;
 
     @Inject
-    public UserUtils(UserRepository userRepo) {
+    public UserService(UserRepository userRepo) {
         this.userRepo = userRepo;
     }
 
@@ -28,6 +29,19 @@ public class UserUtils {
             return false;
         }
         userRepo.delete(user);
+        return true;
+    }
+
+    public boolean updateProfile(UserProfileUpdateDTO userProfileUpdateDTO) {
+        User user = getUserById(userProfileUpdateDTO.getUsername());
+        if(user == null) {
+            return false;
+        }
+        user.setName(userProfileUpdateDTO.getName());
+        user.setEmail(userProfileUpdateDTO.getEmail());
+        user.setPhone(userProfileUpdateDTO.getPhone());
+        user.setAddress(userProfileUpdateDTO.getAddress());
+        saveUser(user);
         return true;
     }
 
