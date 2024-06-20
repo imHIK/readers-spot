@@ -54,3 +54,12 @@ If you want to learn more about building native executables, please consult http
 Easily start your REST Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+
+
+## Books API:
+
+[Open Library API]( https://openlibrary.org/dev/docs/api/books)
+
+[Internet Archive API]( https://archive.org/advancedsearch.php)
+
+[Google Books API]( https://developers.google.com/books/docs/overview)

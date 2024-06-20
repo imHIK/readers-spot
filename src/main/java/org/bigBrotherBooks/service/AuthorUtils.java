@@ -3,6 +3,7 @@ package org.bigBrotherBooks.service;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.bigBrotherBooks.model.Author;
+import org.bigBrotherBooks.model.AuthorDetails;
 import org.bigBrotherBooks.model.Book;
 
 import java.util.List;
@@ -10,8 +11,8 @@ import java.util.List;
 @Singleton
 public class AuthorUtils {
 
-    AuthorRepository authorRepo;
-    BookUtils bookUtils;
+    private AuthorRepository authorRepo;
+    private BookUtils bookUtils;
 
     @Inject
     public AuthorUtils(AuthorRepository authorRepo, BookUtils bookUtils) {
@@ -27,11 +28,21 @@ public class AuthorUtils {
         return authorRepo.findById((long)authorId);
     }
 
+    public AuthorDetails getAuthorDetails(int authorId){
+        Author author = authorRepo.findById((long)authorId);
+        if (author == null) {
+            return null;
+        }
+        List<Book> books = bookUtils.getBooks(author.getBooks());
+        return new AuthorDetails(author, books);
+    }
+
     public boolean deleteAuthor(int authorId){
-        if(authorRepo.findById((long)authorId) == null){
+        Author author = getAuthor(authorId);
+        if(author == null){
             return false;
         }
-        authorRepo.deleteById((long)authorId);
+        authorRepo.delete(author);
         return true;
     }
 

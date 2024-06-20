@@ -11,8 +11,8 @@ import java.util.List;
 @Singleton
 public class BookUtils {
 
-    BookRepository bookRepo;
-    AuthorUtils authorUtils;
+    private BookRepository bookRepo;
+    private AuthorUtils authorUtils;
 
     @Inject
     public BookUtils(BookRepository bookRepo, AuthorUtils authorUtils) {
