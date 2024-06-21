@@ -1,61 +1,5 @@
 # readers-spot
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
-
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
-
-## Running the application in dev mode
-
-You can run your application in dev mode that enables live coding using:
-```shell script
-./gradlew quarkusDev
-```
-
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
-
-## Packaging and running the application
-
-The application can be packaged using:
-```shell script
-./gradlew build
-```
-It produces the `quarkus-run.jar` file in the `build/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./gradlew build -Dquarkus.package.jar.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar build/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using: 
-```shell script
-./gradlew build -Dquarkus.native.enabled=true
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./gradlew build -Dquarkus.native.enabled=true -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./build/readers-spot-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/gradle-tooling.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
-
-
 ## Books API:
 
 [Open Library API]( https://openlibrary.org/dev/docs/api/books)
@@ -63,3 +7,23 @@ Easily start your REST Web Services
 [Internet Archive API]( https://archive.org/advancedsearch.php)
 
 [Google Books API]( https://developers.google.com/books/docs/overview)
+
+## Main motive : 
+
+TO provide an environment for book lovers to explore and find books of their interest.
+
+They should be able to rate and review the books and authors they have read.
+
+They should be able to start a discussion by making groups.
+
+We will be making a renting system for the books.
+
+### Warehouse: 
+
+There will be warehouses which will have the books in different areas. 
+
+And the user will be able to check if the book is available in the warehouse near them.
+
+They will be provided with renting prices and a deadline to return the book.
+
+There will be a queue for waiting users if book is not available.
