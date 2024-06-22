@@ -20,6 +20,19 @@ public class Book {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "rating")
+    private Double rating;
+
+
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
     public int getBookId() {
         return bookId;
     }
@@ -57,8 +70,9 @@ public class Book {
         return "Book{" +
                 "bookId=" + bookId +
                 ", name='" + name + '\'' +
-                ", authorId='" + authorId + '\'' +
+                ", authorId=" + authorId +
                 ", description='" + description + '\'' +
+                ", rating=" + rating +
                 '}';
     }
 }

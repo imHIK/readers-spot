@@ -27,3 +27,10 @@ And the user will be able to check if the book is available in the warehouse nea
 They will be provided with renting prices and a deadline to return the book.
 
 There will be a queue for waiting users if book is not available.
+
+
+### plans for future:
+
+add warehouse
+add renting system
+add user uath (token)
