@@ -2,9 +2,8 @@ package org.bigBrotherBooks.service;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import jakarta.transaction.Transactional;
 import org.bigBrotherBooks.model.Author;
-import org.bigBrotherBooks.model.AuthorDetails;
-import org.bigBrotherBooks.model.Book;
 
 import java.util.List;
 
@@ -12,14 +11,13 @@ import java.util.List;
 public class AuthorService {
 
     private AuthorRepository authorRepo;
-    private BookService bookService;
 
     @Inject
-    public AuthorService(AuthorRepository authorRepo, BookService bookService) {
+    public AuthorService(AuthorRepository authorRepo) {
         this.authorRepo = authorRepo;
-        this.bookService = bookService;
     }
 
+    @Transactional
     public void saveAuthor(Author author){
         authorRepo.persist(author);
     }
@@ -28,15 +26,17 @@ public class AuthorService {
         return authorRepo.findById((long)authorId);
     }
 
-    public AuthorDetails getAuthorDetails(int authorId){
-        Author author = authorRepo.findById((long)authorId);
-        if (author == null) {
+    @Transactional
+    public Author updateAuthor(Author author) {
+        Author existingAuthor = getAuthor(author.getAuthorId());
+        if (existingAuthor == null) {
             return null;
         }
-        List<Book> books = bookService.getBooks(author.getBooks());
-        return new AuthorDetails(author, books);
+        mapAuthorDetails(author, existingAuthor);   // transactional operation, so changes in the table without update call
+        return author;
     }
 
+    @Transactional
     public boolean deleteAuthor(int authorId){
         Author author = getAuthor(authorId);
         if(author == null){
@@ -46,20 +46,8 @@ public class AuthorService {
         return true;
     }
 
-    public void getAuthors(){
-        authorRepo.listAll();
-    }
-
-    public List<Book> getBooksByAuthor(int authorId){
-        Author author = authorRepo.findById((long)authorId);
-        if (author == null) {
-            return null;
-        }
-        List<Integer> bookIds = author.getBooks();
-        if(bookIds == null || bookIds.isEmpty()){
-            return null;
-        }
-        return bookService.getBooks(bookIds);
+    public List<Author> getAuthors() {
+        return authorRepo.listAll();
     }
 
     public Author getDummyAuthor(){
@@ -67,6 +55,13 @@ public class AuthorService {
         author.setName("Dummy Author");
         author.setAbout("This is a dummy author");
         return author;
+    }
+
+    private void mapAuthorDetails(Author author, Author existingAuthor) {
+        existingAuthor.setAbout(author.getAbout());
+        existingAuthor.setName(author.getName());
+        existingAuthor.setBooks(author.getBooks());
+        existingAuthor.setFans(author.getFans());
     }
 
 }

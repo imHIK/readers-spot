@@ -1,9 +1,11 @@
 package org.bigBrotherBooks.resource;
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import org.bigBrotherBooks.model.Author;
 import org.bigBrotherBooks.model.Book;
 import org.bigBrotherBooks.service.AuthorService;
@@ -16,7 +18,7 @@ public class ResourceRestApi {
     private BookService bookService;
 
     @Inject
-    ResourceRestApi(AuthorService authorService, BookService bookService){
+    ResourceRestApi(AuthorService authorService, BookService bookService) {
         this.authorService = authorService;
         this.bookService = bookService;
     }
@@ -25,16 +27,19 @@ public class ResourceRestApi {
 
     @GET
     @Path("/save/author")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String saveAuthor() {
-        Author author = authorService.getDummyAuthor();
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response saveAuthor(@Valid Author author) {
+        if (author == null) {
+            authorService.saveAuthor(authorService.getDummyAuthor());
+            return Response.status(Status.ACCEPTED).entity("Author not passed, Dummy Author saved").build();
+        }
         authorService.saveAuthor(author);
-        return "Author Saved Successfully";
+        return Response.status(Status.CREATED).entity("Author " + author.getAuthorId() + " saved Successfully").build();
     }
 
     @GET
     @Path("/get/author/{id}")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getAuthor(@PathParam("id") int authorId) {
         Author author = authorService.getAuthor(authorId);
         return Response.ok(author).build();
@@ -42,27 +47,30 @@ public class ResourceRestApi {
 
     @DELETE
     @Path("/delete/author/{id}")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String deleteAuthor(@PathParam("id") int authorId) {
-        if(authorService.deleteAuthor(authorId))
-            return "Author Deleted Successfully";
-        return "Author not found";
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteAuthor(@PathParam("id") int authorId) {
+        if (authorService.deleteAuthor(authorId))
+            return Response.ok("Author " + authorId + " Deleted Successfully").build();
+        return Response.status(Status.NOT_FOUND).entity("Author not found").build();
     }
 
     // book endpoints
 
     @GET
     @Path("/save/book")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String saveBook() {
-        Book book = bookService.getDummyBook();
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response saveBook(Book book) {
+        if (book == null) {
+            bookService.saveBook(bookService.getDummyBook());
+            return Response.status(Status.ACCEPTED).entity("Book not passed, Dummy Book saved").build();
+        }
         bookService.saveBook(book);
-        return "Book Saved Successfully";
+        return Response.status(Status.CREATED).entity("Book " + book.getBookId() + " saved Successfully").build();
     }
 
     @GET
     @Path("/get/book/{id}")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getBook(@PathParam("id") int bookId) {
         Book book = bookService.getBook(bookId);
         return Response.ok(book).build();
@@ -70,10 +78,10 @@ public class ResourceRestApi {
 
     @DELETE
     @Path("/delete/book/{id}")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String deleteBook(@PathParam("id") int bookId) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteBook(@PathParam("id") int bookId) {
         if (bookService.deleteBook(bookId))
-            return "Book Deleted Successfully";
-        return "Book not found";
+            return Response.ok("Book " + bookId + " Deleted Successfully").build();
+        return Response.status(Status.NOT_FOUND).entity("Book not found").build();
     }
 }

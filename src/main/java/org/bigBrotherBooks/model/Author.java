@@ -2,8 +2,20 @@ package org.bigBrotherBooks.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
+
+/**
+ * Represents a unique author entry.
+ * Fields
+ * authorId: int
+ * name: String
+ * about: String
+ * books: Set<Book> -> one to many
+ * fans: Set<User> -> many to many
+ */
+
 
 @Entity
 @Table(name = "author")
@@ -20,11 +32,14 @@ public class Author {
     @Column(name = "about")
     private String about;
 
-    @Column(name = "books")
-    private List<Integer> books;
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Book> books;
+
+    @ManyToMany(mappedBy = "favoriteAuthors")
+    private Set<User> fans;
 
     public Author() {
-        books = new ArrayList<>();
+        books = new HashSet<>();
     }
 
     public int getAuthorId() {
@@ -43,16 +58,12 @@ public class Author {
         this.name = name;
     }
 
-    public List<Integer> getBooks() {
+    public Set<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Integer> books) {
+    public void setBooks(Set<Book> books) {
         this.books = books;
-    }
-
-    public void addBook(int bookId) {
-        books.add(bookId);
     }
 
     public String getAbout() {
@@ -63,6 +74,14 @@ public class Author {
         this.about = about;
     }
 
+    public Set<User> getFans() {
+        return fans;
+    }
+
+    public void setFans(Set<User> fans) {
+        this.fans = fans;
+    }
+
     @Override
     public String toString() {
         return "Author{" +
@@ -70,6 +89,7 @@ public class Author {
                 ", name='" + name + '\'' +
                 ", about='" + about + '\'' +
                 ", books=" + books +
+                ", fans=" + fans +
                 '}';
     }
 }

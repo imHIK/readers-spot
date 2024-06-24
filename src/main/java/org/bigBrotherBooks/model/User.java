@@ -1,11 +1,26 @@
 package org.bigBrotherBooks.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
+
+/**
+ * Fields
+ * userName: String
+ * password: String
+ * name: String
+ * email: String
+ * phone: String
+ * address: String
+ * isAdmin: boolean
+ * isDeleted: boolean
+ * favoriteBooks: Set<Book>  -> many to many
+ * favoriteAuthors: Set<Author> -> many to many
+ * following: Set<User>  -> many to many
+ * followedBy: Set<User>  -> many to many
+ * rentRequests: List<Integer>   ->  later change to List<RentRequest>
+ */
 
 @Entity
 public class User {
@@ -32,16 +47,45 @@ public class User {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
-    private Set<Integer> favoriteBooks;
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
 
-    private Set<Integer> favoriteAuthors;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "favorite_books",
+            joinColumns = @JoinColumn(name = "user_name"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    private Set<Book> favoriteBooks;
 
-    private Set<String> followingUsers;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "favorite_authors",
+            joinColumns = @JoinColumn(name = "user_name"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    private Set<Author> favoriteAuthors;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "following",
+            joinColumns = @JoinColumn(name = "user_name"),
+            inverseJoinColumns = @JoinColumn(name = "following_user_name")
+    )
+    private Set<User> following;
+
+    @ManyToMany(mappedBy = "following")
+    private Set<User> followedBy;
+
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RentRequest> rentRequests;
 
     public User() {
         favoriteBooks = new HashSet<>();
         favoriteAuthors = new HashSet<>();
-        followingUsers = new HashSet<>();
+        following = new HashSet<>();
+        followedBy = new HashSet<>();
     }
 
     public String getUserName() {
@@ -100,67 +144,81 @@ public class User {
         isAdmin = admin;
     }
 
-    public Set<Integer> getFavoriteBooks() {
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public Set<Book> getFavoriteBooks() {
         return favoriteBooks;
     }
 
-    public void setFavoriteBooks(Set<Integer> favoriteBooks) {
+    public void setFavoriteBooks(Set<Book> favoriteBooks) {
         this.favoriteBooks = favoriteBooks;
     }
 
-    public void addFavoriteBook(int bookId) {
-        favoriteBooks.add(bookId);
-    }
-
-    public void removeFavoriteBook(int bookId) {
-        favoriteBooks.remove(bookId);
-    }
-
-    public Set<Integer> getFavoriteAuthors() {
+    public Set<Author> getFavoriteAuthors() {
         return favoriteAuthors;
     }
 
-    public void setFavoriteAuthors(Set<Integer> favoriteAuthors) {
+    public void setFavoriteAuthors(Set<Author> favoriteAuthors) {
         this.favoriteAuthors = favoriteAuthors;
     }
 
-    public void addFavoriteAuthor(int authorId) {
-        favoriteAuthors.add(authorId);
+    public Set<User> getFollowing() {
+        return following;
     }
 
-    public void removeFavoriteAuthor(int authorId) {
-        favoriteAuthors.remove(authorId);
+    public void setFollowing(Set<User> following) {
+        this.following = following;
     }
 
-    public Set<String> getFollowingUsers() {
-        return followingUsers;
+    public void followUser(User user) {
+        following.add(user);
+        user.followedBy.add(this);
     }
 
-    public void setFollowingUsers(Set<String> followingUsers) {
-        this.followingUsers = followingUsers;
+    public void unfollowUser(User user) {
+        following.remove(user);
+        user.followedBy.remove(this);
     }
 
-    public void followUser(String username) {
-        followingUsers.add(username);
+    public Set<User> getFollowedBy() {
+        return followedBy;
     }
 
-    public void unfollowUser(String username) {
-        followingUsers.remove(username);
+    public void setFollowedBy(Set<User> followedBy) {
+        this.followedBy = followedBy;
+    }
+
+    public Set<RentRequest> getRentRequests() {
+        return rentRequests;
+    }
+
+    public void setRentRequests(Set<RentRequest> rentRequests) {
+        this.rentRequests = rentRequests;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "usernName='" + userName + '\'' +
+                "userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", isAdmin=" + isAdmin +
+                ", isDeleted=" + isDeleted +
                 ", favoriteBooks=" + favoriteBooks +
                 ", favoriteAuthors=" + favoriteAuthors +
-                ", followingUsers=" + followingUsers +
+                ", following=" + following +
+                ", followedBy=" + followedBy +
+                ", rentRequests=" + rentRequests +
                 '}';
     }
+
 }
