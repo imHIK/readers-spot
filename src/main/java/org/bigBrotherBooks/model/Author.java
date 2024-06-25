@@ -82,6 +82,16 @@ public class Author {
         this.fans = fans;
     }
 
+    public void addFan(User user) {
+        fans.add(user);
+        user.getFavoriteAuthors().add(this);
+    }
+
+    public void removeFan(User user) {
+        fans.remove(user);
+        user.getFavoriteAuthors().remove(this);
+    }
+
     @Override
     public String toString() {
         return "Author{" +

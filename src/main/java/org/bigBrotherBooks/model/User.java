@@ -160,12 +160,32 @@ public class User {
         this.favoriteBooks = favoriteBooks;
     }
 
+    public void addFavoriteBook(Book book) {
+        favoriteBooks.add(book);
+        book.getFans().add(this);
+    }
+
+    public void removeFavoriteBook(Book book) {
+        favoriteBooks.remove(book);
+        book.getFans().remove(this);
+    }
+
     public Set<Author> getFavoriteAuthors() {
         return favoriteAuthors;
     }
 
     public void setFavoriteAuthors(Set<Author> favoriteAuthors) {
         this.favoriteAuthors = favoriteAuthors;
+    }
+
+    public void addFavoriteAuthor(Author author) {
+        favoriteAuthors.add(author);
+        author.getFans().add(this);
+    }
+
+    public void removeFavoriteAuthor(Author author) {
+        favoriteAuthors.remove(author);
+        author.getFans().remove(this);
     }
 
     public Set<User> getFollowing() {
@@ -176,14 +196,14 @@ public class User {
         this.following = following;
     }
 
-    public void followUser(User user) {
-        following.add(user);
-        user.followedBy.add(this);
+    public void addFollowing(User userToFollow) {
+        following.add(userToFollow);
+        userToFollow.getFollowedBy().add(this);
     }
 
-    public void unfollowUser(User user) {
-        following.remove(user);
-        user.followedBy.remove(this);
+    public void removeFollowing(User userToUnfollow) {
+        following.remove(userToUnfollow);
+        userToUnfollow.getFollowedBy().remove(this);
     }
 
     public Set<User> getFollowedBy() {
@@ -192,6 +212,16 @@ public class User {
 
     public void setFollowedBy(Set<User> followedBy) {
         this.followedBy = followedBy;
+    }
+
+    public void addFollowedBy(User user) {
+        followedBy.add(user);
+        user.getFollowing().add(this);
+    }
+
+    public void removeFollowedBy(User user) {
+        followedBy.remove(user);
+        user.getFollowing().remove(this);
     }
 
     public Set<RentRequest> getRentRequests() {

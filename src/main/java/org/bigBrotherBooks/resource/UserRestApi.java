@@ -18,7 +18,7 @@ import java.util.List;
 public class UserRestApi {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRestApi.class);
-    UserService userService;
+    private UserService userService;
 
     @Inject
     public UserRestApi(UserService userService) {
@@ -51,6 +51,17 @@ if(user == null) {
         LOGGER.info("Save User");
         userService.saveUser(user);
         return Response.status(Response.Status.CREATED).entity("User " + user.getUserName() + " saved successfully").build();
+    }
+
+    @POST
+    @Path("/update")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateUser(@Valid User user) {
+        LOGGER.info("Update User");
+        if (userService.updateUser(user)) {
+            return Response.ok("User " + user.getUserName() + " updated successfully").build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).entity("User " + user.getUserName() + " not found").build();
     }
 
     @DELETE      // TODO: hard and soft delete
@@ -87,14 +98,9 @@ if(user == null) {
     @Produces(MediaType.APPLICATION_JSON)
     public Response followUser(@PathParam("user_name") String toUserName, @QueryParam("from") String fromUserName) {
         LOGGER.info("Follow User");
-        User toUser = userService.getUserById(toUserName);
-        User fromUser = userService.getUserById(fromUserName);
-        if(toUser == null || fromUser == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
-        }
-        fromUser.followUser(toUser);
-        userService.saveUser(fromUser);
-        return Response.ok("User " + fromUserName + " is now following " + toUserName).build();
+        if (userService.followUser(fromUserName, toUserName, true))
+            return Response.ok("User " + fromUserName + " is now following " + toUserName).build();
+        return Response.status(Response.Status.NOT_FOUND).entity("User or Followed User not found").build();
     }
 
     @POST
@@ -102,13 +108,8 @@ if(user == null) {
     @Produces(MediaType.APPLICATION_JSON)
     public Response unfollowUser(@PathParam("user_name") String toUserName, @QueryParam("from") String fromUserName) {
         LOGGER.info("Unfollow User");
-        User toUser = userService.getUserById(toUserName);
-        User fromUser = userService.getUserById(fromUserName);
-        if(toUser == null || fromUser == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
-        }
-        fromUser.unfollowUser(toUser);
-        userService.saveUser(fromUser);
+        if (userService.followUser(fromUserName, toUserName, false))
+            return Response.ok("User " + fromUserName + " has unfollowed " + toUserName).build();
         return Response.ok("User " + fromUserName + " has unfollowed " + toUserName).build();
     }
 
@@ -119,6 +120,57 @@ if(user == null) {
         LOGGER.info("Update Profile");
         userService.updateProfile(userProfileUpdateDTO);
         return Response.ok("Profile updated successfully").build();
+    }
+
+    @GET
+    @Path("/detailed/{user_name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFullUser(@PathParam("user_name") String userName) {
+        Object user = userService.getFullUser(userName);
+        if (user == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("User " + userName + " not found").build();
+        }
+        return Response.ok(user).build();
+    }
+
+    @POST
+    @Path("/addFavoriteBook/{user_name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addFavoriteBook(@PathParam("user_name") String userName, @QueryParam("book_id") int bookId) {
+        LOGGER.info("Add Favorite Book");
+        if (userService.modifyFavoriteBook(userName, bookId, true))
+            return Response.ok("Book " + bookId + " added to favorites of " + userName).build();
+        return Response.status(Response.Status.NOT_FOUND).entity("User or Book not found").build();
+    }
+
+    @POST
+    @Path("/removeFavoriteBook/{user_name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response removeFavoriteBook(@PathParam("user_name") String userName, @QueryParam("book_id") int bookId) {
+        LOGGER.info("Remove Favorite Book");
+        if (userService.modifyFavoriteBook(userName, bookId, false))
+            return Response.ok("Book " + bookId + " removed from favorites of " + userName).build();
+        return Response.status(Response.Status.NOT_FOUND).entity("User or Book not found").build();
+    }
+
+    @POST
+    @Path("/addFavoriteAuthor/{user_name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addFavoriteAuthor(@PathParam("user_name") String userName, @QueryParam("author_id") int authorId) {
+        LOGGER.info("Add Favorite Author");
+        if (userService.modifyFavoriteAuthor(userName, authorId, true))
+            return Response.ok("Author " + authorId + " added to favorites of " + userName).build();
+        return Response.status(Response.Status.NOT_FOUND).entity("User or Author not found").build();
+    }
+
+    @POST
+    @Path("/removeFavoriteAuthor/{user_name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response removeFavoriteAuthor(@PathParam("user_name") String userName, @QueryParam("author_id") int authorId) {
+        LOGGER.info("Remove Favorite Author");
+        if (userService.modifyFavoriteAuthor(userName, authorId, false))
+            return Response.ok("Author " + authorId + " removed from favorites of " + userName).build();
+        return Response.status(Response.Status.NOT_FOUND).entity("User or Author not found").build();
     }
 
 }

@@ -112,6 +112,16 @@ public class Book {
         this.fans = fans;
     }
 
+    public void addFan(User user) {
+        fans.add(user);
+        user.getFavoriteBooks().add(this);
+    }
+
+    public void removeFan(User user) {
+        fans.remove(user);
+        user.getFavoriteBooks().remove(this);
+    }
+
     public Set<Review> getReviews() {
         return reviews;
     }

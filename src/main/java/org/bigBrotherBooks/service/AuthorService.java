@@ -69,15 +69,15 @@ public class AuthorService {
         return author;
     }
 
+    public AuthorDTO mapToAuthorDTO(Author author) {
+        return new AuthorDTO(author.getAuthorId(), author.getName(), author.getAbout());
+    }
+
     private void mapAuthorDetails(Author author, Author existingAuthor) {
         existingAuthor.setAbout(author.getAbout());
         existingAuthor.setName(author.getName());
         existingAuthor.setBooks(author.getBooks());
         existingAuthor.setFans(author.getFans());
-    }
-
-    AuthorDTO mapToAuthorDTO(Author author) {
-        return new AuthorDTO(author.getAuthorId(), author.getName(), author.getAbout());
     }
 
 }

@@ -30,7 +30,7 @@ public class AuthorRestApi {
         return Response.ok("Welcome to the Authors API").build();
     }
 
-    @GET
+    @POST
     @Path("/save")
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveAuthor(@Valid Author author) {

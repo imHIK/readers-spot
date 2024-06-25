@@ -89,6 +89,10 @@ public class BookService {
         return book;
     }
 
+    public BookDTO mapToBookDTO(Book book) {
+        return new BookDTO(book.getBookId(), book.getName(), book.getDescription(), book.getRating(), book.getGenres());
+    }
+
     private void mapBookDetails(Book book, Book existingBook) {
         existingBook.setDescription(book.getDescription());
         existingBook.setName(book.getName());
@@ -97,10 +101,6 @@ public class BookService {
         existingBook.setRating(book.getRating());
         existingBook.setFans(book.getFans());
         existingBook.setReviews(book.getReviews());
-    }
-
-    private BookDTO mapToBookDTO(Book book) {
-        return new BookDTO(book.getBookId(), book.getName(), book.getDescription(), book.getRating(), book.getGenres());
     }
 
 }
