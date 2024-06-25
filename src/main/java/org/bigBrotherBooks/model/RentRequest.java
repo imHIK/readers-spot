@@ -1,14 +1,14 @@
 package org.bigBrotherBooks.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import org.bigBrotherBooks.configModels.Condition;
 import org.bigBrotherBooks.configModels.Status;
 
-
+@Entity
 public class RentRequest {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reqId;
 
     @ManyToOne

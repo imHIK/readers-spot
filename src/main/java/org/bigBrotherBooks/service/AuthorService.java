@@ -3,6 +3,7 @@ package org.bigBrotherBooks.service;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
+import org.bigBrotherBooks.dto.AuthorDTO;
 import org.bigBrotherBooks.model.Author;
 
 import java.util.List;
@@ -22,9 +23,20 @@ public class AuthorService {
         authorRepo.persist(author);
     }
 
+    @Transactional
     public Author getAuthor(int authorId){
         return authorRepo.findById((long)authorId);
     }
+
+    @Transactional
+    public AuthorDTO getAuthorDTO(int authorId) {
+        Author author = getAuthor(authorId);
+        if (author == null) {
+            return null;
+        }
+        return mapToAuthorDTO(author);
+    }
+
 
     @Transactional
     public Author updateAuthor(Author author) {
@@ -62,6 +74,10 @@ public class AuthorService {
         existingAuthor.setName(author.getName());
         existingAuthor.setBooks(author.getBooks());
         existingAuthor.setFans(author.getFans());
+    }
+
+    AuthorDTO mapToAuthorDTO(Author author) {
+        return new AuthorDTO(author.getAuthorId(), author.getName(), author.getAbout());
     }
 
 }

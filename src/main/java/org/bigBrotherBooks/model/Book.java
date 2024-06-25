@@ -3,8 +3,8 @@ package org.bigBrotherBooks.model;
 import jakarta.persistence.*;
 import org.bigBrotherBooks.configModels.Genre;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -36,10 +36,10 @@ public class Book {
     @JoinColumn(name = "author_id")
     private Author author;
 
-    @ManyToMany(mappedBy = "favoriteBooks")
+    @ManyToMany(mappedBy = "favoriteBooks", fetch = FetchType.LAZY)
     private Set<User> fans;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Review> reviews;
 
     @Column(name = "description")
@@ -51,7 +51,10 @@ public class Book {
     @Column(name = "genres")
     private List<Genre> genres;
 
-    private Map<Integer, Integer> warehouseStocks;
+    public Book() {
+        fans = new HashSet<>();
+        reviews = new HashSet<>();
+    }
 
     public Double getRating() {
         return rating;
@@ -117,13 +120,6 @@ public class Book {
         this.reviews = reviews;
     }
 
-    public Map<Integer, Integer> getWarehouseStocks() {
-        return warehouseStocks;
-    }
-
-    public void setWarehouseStocks(Map<Integer, Integer> warehouseStocks) {
-        this.warehouseStocks = warehouseStocks;
-    }
 
     @Override
     public String toString() {
@@ -136,7 +132,6 @@ public class Book {
                 ", description='" + description + '\'' +
                 ", rating=" + rating +
                 ", genres=" + genres +
-                ", warehouseStocks=" + warehouseStocks +
                 '}';
     }
 }

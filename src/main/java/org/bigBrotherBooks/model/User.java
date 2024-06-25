@@ -50,7 +50,7 @@ public class User {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "favorite_books",
             joinColumns = @JoinColumn(name = "user_name"),
