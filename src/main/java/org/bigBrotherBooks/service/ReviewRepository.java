@@ -7,6 +7,6 @@ import org.bigBrotherBooks.model.Review;
 
 @Transactional
 @Singleton
-public class ReviewRepository implements PanacheRepositoryBase<Review, Long> {
+public class ReviewRepository implements PanacheRepositoryBase<Review, Review.ReviewId> {
 
 }

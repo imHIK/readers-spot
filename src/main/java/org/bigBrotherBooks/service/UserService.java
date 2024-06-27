@@ -4,31 +4,26 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
 import org.bigBrotherBooks.configModels.CustomMap;
-import org.bigBrotherBooks.dto.AuthorDTO;
-import org.bigBrotherBooks.dto.BookDTO;
-import org.bigBrotherBooks.dto.UserDTO;
-import org.bigBrotherBooks.dto.UserProfileUpdateDTO;
+import org.bigBrotherBooks.dto.*;
 import org.bigBrotherBooks.model.Author;
 import org.bigBrotherBooks.model.Book;
-import org.bigBrotherBooks.model.Review;
 import org.bigBrotherBooks.model.User;
 
 import java.util.List;
+
 
 @Singleton
 public class UserService {
 
     private final UserRepository userRepo;
-    private final ReviewService reviewService;
     private final BookService bookService;
     private final AuthorService authorService;
 
     @Inject
-    public UserService(UserRepository userRepo, BookService bookService, AuthorService authorService, ReviewService reviewService) {
+    public UserService(UserRepository userRepo, BookService bookService, AuthorService authorService) {
         this.userRepo = userRepo;
         this.bookService = bookService;
         this.authorService = authorService;
-        this.reviewService = reviewService;
     }
 
     @Transactional
@@ -146,30 +141,9 @@ public class UserService {
     }
 
     @Transactional
-    public boolean addReview(String userNama, int bookId, Review review) {
-        review.setTime(System.currentTimeMillis());
-        User user = getUserById(userNama);
-        Book book = bookService.getBook(bookId);
-        if (user == null || book == null) {
-            return false;
-        }
-        reviewService.saveReview(review);
-        user.addReview(review);
-        book.addReview(review);
-        return true;
-    }
-
-    @Transactional
-    public boolean removeReview(String userName, int reviewId) {
+    public List<ReviewDTO> getReviews(String userName) {
         User user = getUserById(userName);
-        Review review = reviewService.getReviewById(reviewId);
-        if (user == null || review == null) {
-            return false;
-        }
-        Book book = review.getBook();
-        user.removeReview(review);
-        book.removeReview(review);
-        return true;
+        return user.getReviews().stream().map(ReviewService::mapToReviewDTO).toList();
     }
 
     @Transactional

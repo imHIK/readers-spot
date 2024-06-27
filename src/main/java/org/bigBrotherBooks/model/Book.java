@@ -36,7 +36,7 @@ public class Book {
     @JoinColumn(name = "author_id")
     private Author author;
 
-    @ManyToMany(mappedBy = "favoriteBooks", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "favoriteBooks")
     private Set<User> fans;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -50,6 +50,9 @@ public class Book {
 
     @Column(name = "genres")
     private List<Genre> genres;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Stock> warehouseStock;
 
     public Book() {
         fans = new HashSet<>();
@@ -142,6 +145,13 @@ public class Book {
         }
     }
 
+    public Set<Stock> getWarehouseStock() {
+        return warehouseStock;
+    }
+
+    public void setWarehouseStock(Set<Stock> warehouseStock) {
+        this.warehouseStock = warehouseStock;
+    }
 
     @Override
     public String toString() {
@@ -154,6 +164,7 @@ public class Book {
                 ", description='" + description + '\'' +
                 ", rating=" + rating +
                 ", genres=" + genres +
+                ", warehouseStock=" + warehouseStock +
                 '}';
     }
 }
