@@ -50,7 +50,7 @@ public class User {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "favorite_books",
             joinColumns = @JoinColumn(name = "user_name"),
@@ -58,7 +58,7 @@ public class User {
     )
     private Set<Book> favoriteBooks;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "favorite_authors",
             joinColumns = @JoinColumn(name = "user_name"),
@@ -66,7 +66,7 @@ public class User {
     )
     private Set<Author> favoriteAuthors;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "following",
             joinColumns = @JoinColumn(name = "user_name"),
@@ -78,10 +78,10 @@ public class User {
     private Set<User> followedBy;
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user")
     private Set<RentRequest> rentRequests;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user")
     private Set<Review> reviews;
 
     public User() {

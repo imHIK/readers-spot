@@ -16,6 +16,9 @@ public class Warehouse {
     private String name;
 
     @Column
+    private String city;
+
+    @Column
     private String area;
 
     @Column
@@ -33,8 +36,11 @@ public class Warehouse {
     @Column
     private Double rating;
 
-    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "warehouse")
     private Set<RentRequest> rentRequests;
+
+    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Stock> bookStock;
 
     public int getWarehouseId() {
         return warehouseId;
@@ -50,6 +56,14 @@ public class Warehouse {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getArea() {
@@ -108,11 +122,20 @@ public class Warehouse {
         this.rentRequests = rentRequests;
     }
 
+    public Set<Stock> getBookStock() {
+        return bookStock;
+    }
+
+    public void setBookStock(Set<Stock> bookStock) {
+        this.bookStock = bookStock;
+    }
+
     @Override
     public String toString() {
         return "Warehouse{" +
                 "warehouseId=" + warehouseId +
                 ", name='" + name + '\'' +
+                ", city='" + city + '\'' +
                 ", area='" + area + '\'' +
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
@@ -120,6 +143,7 @@ public class Warehouse {
                 ", managerName='" + managerName + '\'' +
                 ", rating=" + rating +
                 ", rentRequests=" + rentRequests +
+                ", bookStock=" + bookStock +
                 '}';
     }
 }

@@ -6,10 +6,13 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.bigBrotherBooks.dto.BookDTO;
+import org.bigBrotherBooks.dto.ReviewDTO;
 import org.bigBrotherBooks.model.Book;
 import org.bigBrotherBooks.service.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 @Path("/resource/book")
 public class BookRestApi {
@@ -91,6 +94,14 @@ public class BookRestApi {
             return Response.status(Response.Status.NOT_FOUND).entity("Book " + bookId + " not found").build();
         }
         return Response.ok(book).build();
+    }
+
+    @GET
+    @Path("/reviews/{book_id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBookReviews(@PathParam("book_id") int bookId) {
+        List<ReviewDTO> reviews = bookService.getReviews(bookId);
+        return Response.ok(reviews).build();
     }
 
 }

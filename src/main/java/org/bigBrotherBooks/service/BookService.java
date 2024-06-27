@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.bigBrotherBooks.configModels.CustomMap;
 import org.bigBrotherBooks.dto.AuthorDTO;
 import org.bigBrotherBooks.dto.BookDTO;
+import org.bigBrotherBooks.dto.ReviewDTO;
 import org.bigBrotherBooks.dto.UserDTO;
 import org.bigBrotherBooks.model.Book;
 import org.slf4j.Logger;
@@ -95,6 +96,12 @@ public class BookService {
     public List<BookDTO> getAllBookDTOs() {
         List<Book> books = getAllBooks();
         return books.stream().map(BookService::mapToBookDTO).toList();
+    }
+
+    @Transactional
+    public List<ReviewDTO> getReviews(int bookId) {
+        Book book = getBook(bookId);
+        return book.getReviews().stream().map(ReviewService::mapToReviewDTO).toList();
     }
 
     public Book getDummyBook(){
