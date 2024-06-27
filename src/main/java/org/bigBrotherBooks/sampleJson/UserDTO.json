@@ -1,0 +1,10 @@
+{
+    "userName": "labdhi",
+    "password": "password",
+    "name": "Labdhi Kapasi",
+    "email": "labdhi@example.com",
+    "phone": "+1234567890",
+    "address": "123 Main Street, City, Country",
+    "isAdmin": false,
+    "isDeleted": false
+}

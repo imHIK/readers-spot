@@ -31,6 +31,6 @@ There will be a queue for waiting users if book is not available.
 
 ### plans for future:
 
-add warehouse
-add renting system
-add user uath (token)
+renting system
+
+book pedia

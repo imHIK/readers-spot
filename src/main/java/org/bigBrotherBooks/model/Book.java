@@ -39,7 +39,7 @@ public class Book {
     @ManyToMany(mappedBy = "favoriteBooks", fetch = FetchType.LAZY)
     private Set<User> fans;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews;
 
     @Column(name = "description")
@@ -128,6 +128,18 @@ public class Book {
 
     public void setReviews(Set<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+        review.setBook(this);
+    }
+
+    public void removeReview(Review review) {
+        if (reviews.contains(review)) {
+            reviews.remove(review);
+            review.setBook(null);
+        }
     }
 
 

@@ -1,15 +1,16 @@
 package org.bigBrotherBooks.service;
 
-import io.smallrye.mutiny.tuples.Tuple3;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
+import org.bigBrotherBooks.configModels.CustomMap;
 import org.bigBrotherBooks.dto.AuthorDTO;
 import org.bigBrotherBooks.dto.BookDTO;
 import org.bigBrotherBooks.dto.UserDTO;
 import org.bigBrotherBooks.dto.UserProfileUpdateDTO;
 import org.bigBrotherBooks.model.Author;
 import org.bigBrotherBooks.model.Book;
+import org.bigBrotherBooks.model.Review;
 import org.bigBrotherBooks.model.User;
 
 import java.util.List;
@@ -17,15 +18,17 @@ import java.util.List;
 @Singleton
 public class UserService {
 
-    private UserRepository userRepo;
-    private BookService bookService;
-    private AuthorService authorService;
+    private final UserRepository userRepo;
+    private final ReviewService reviewService;
+    private final BookService bookService;
+    private final AuthorService authorService;
 
     @Inject
-    public UserService(UserRepository userRepo, BookService bookService, AuthorService authorService) {
+    public UserService(UserRepository userRepo, BookService bookService, AuthorService authorService, ReviewService reviewService) {
         this.userRepo = userRepo;
         this.bookService = bookService;
         this.authorService = authorService;
+        this.reviewService = reviewService;
     }
 
     @Transactional
@@ -70,7 +73,7 @@ public class UserService {
 
     public List<UserDTO> getUserDTOs(List<String> userNames) {
         List<User> users = getUsers(userNames);
-        return users.stream().map(this::mapToUserDTO).toList();
+        return users.stream().map(UserService::mapToUserDTO).toList();
     }
 
     public List<User> getAllUsers() {
@@ -79,19 +82,19 @@ public class UserService {
 
     public List<UserDTO> getAllUserDTOs() {
         List<User> users = getAllUsers();
-        return users.stream().map(this::mapToUserDTO).toList();
+        return users.stream().map(UserService::mapToUserDTO).toList();
     }
 
     @Transactional
-    public Object getFullUser(String userName) {
+    public CustomMap getFullUser(String userName) {
         User user = getUserById(userName);
         if (user == null) {
             return null;
         }
         UserDTO userDTO = mapToUserDTO(user);
-        List<BookDTO> bookDTOs = user.getFavoriteBooks().stream().map(b -> bookService.mapToBookDTO(b)).toList();
-        List<AuthorDTO> authorDTOs = user.getFavoriteAuthors().stream().map(a -> authorService.mapToAuthorDTO(a)).toList();
-        return Tuple3.of(userDTO, bookDTOs, authorDTOs);
+        List<BookDTO> bookDTOs = user.getFavoriteBooks().stream().map(BookService::mapToBookDTO).toList();
+        List<AuthorDTO> authorDTOs = user.getFavoriteAuthors().stream().map(AuthorService::mapToAuthorDTO).toList();
+        return CustomMap.of(userDTO, bookDTOs, authorDTOs);
     }
 
     @Transactional
@@ -143,6 +146,33 @@ public class UserService {
     }
 
     @Transactional
+    public boolean addReview(String userNama, int bookId, Review review) {
+        review.setTime(System.currentTimeMillis());
+        User user = getUserById(userNama);
+        Book book = bookService.getBook(bookId);
+        if (user == null || book == null) {
+            return false;
+        }
+        reviewService.saveReview(review);
+        user.addReview(review);
+        book.addReview(review);
+        return true;
+    }
+
+    @Transactional
+    public boolean removeReview(String userName, int reviewId) {
+        User user = getUserById(userName);
+        Review review = reviewService.getReviewById(reviewId);
+        if (user == null || review == null) {
+            return false;
+        }
+        Book book = review.getBook();
+        user.removeReview(review);
+        book.removeReview(review);
+        return true;
+    }
+
+    @Transactional
     public boolean followUser(String userName, String followingUserName, boolean isStarting) {
         User user = getUserById(userName);
         User followingUser;
@@ -169,8 +199,13 @@ public class UserService {
         return user;
     }
 
+    public static UserDTO mapToUserDTO(User user) {
+        return new UserDTO(user.getUserName(), user.getPassword(), user.getName(), user.getEmail(), user.getPhone(), user.getAddress(), user.isAdmin(), user.isDeleted());
+    }
+
     private void mapUserDetails(User user, User existingUser) {
         existingUser.setName(user.getName());
+        existingUser.setPassword(user.getPassword());
         existingUser.setEmail(user.getEmail());
         existingUser.setPhone(user.getPhone());
         existingUser.setAddress(user.getAddress());
@@ -181,10 +216,6 @@ public class UserService {
 //        existingUser.setFollowing(user.getFollowing());
 //        existingUser.setFollowedBy(user.getFollowedBy());
 //        existingUser.setRentRequests(user.getRentRequests());
-    }
-
-    private UserDTO mapToUserDTO(User user) {
-        return new UserDTO(user.getUserName(), user.getPassword(), user.getName(), user.getEmail(), user.getPhone(), user.getAddress(), user.isAdmin(), user.isDeleted());
     }
 
 

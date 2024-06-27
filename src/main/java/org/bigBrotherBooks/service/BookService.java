@@ -3,7 +3,10 @@ package org.bigBrotherBooks.service;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
+import org.bigBrotherBooks.configModels.CustomMap;
+import org.bigBrotherBooks.dto.AuthorDTO;
 import org.bigBrotherBooks.dto.BookDTO;
+import org.bigBrotherBooks.dto.UserDTO;
 import org.bigBrotherBooks.model.Book;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,9 +69,21 @@ public class BookService {
     }
 
     @Transactional
+    public Object getFullBook(int bookId) {
+        Book book = getBook(bookId);
+        if (book == null) {
+            return null;
+        }
+        BookDTO bookDTO = mapToBookDTO(book);
+        AuthorDTO authorDTO = AuthorService.mapToAuthorDTO(book.getAuthor());
+        List<UserDTO> userDTOs = book.getFans().stream().map(UserService::mapToUserDTO).toList();
+        return CustomMap.of(bookDTO, authorDTO, userDTOs);
+    }
+
+    @Transactional
     public List<BookDTO> getBookDTOs(List<Integer> bookIds) {
         List<Book> books = getBooks(bookIds);
-        return books.stream().map(this::mapToBookDTO).toList();
+        return books.stream().map(BookService::mapToBookDTO).toList();
     }
 
     @Transactional
@@ -79,7 +94,7 @@ public class BookService {
     @Transactional
     public List<BookDTO> getAllBookDTOs() {
         List<Book> books = getAllBooks();
-        return books.stream().map(this::mapToBookDTO).toList();
+        return books.stream().map(BookService::mapToBookDTO).toList();
     }
 
     public Book getDummyBook(){
@@ -89,7 +104,7 @@ public class BookService {
         return book;
     }
 
-    public BookDTO mapToBookDTO(Book book) {
+    public static BookDTO mapToBookDTO(Book book) {
         return new BookDTO(book.getBookId(), book.getName(), book.getDescription(), book.getRating(), book.getGenres());
     }
 
@@ -99,8 +114,8 @@ public class BookService {
         existingBook.setAuthor(book.getAuthor());
         existingBook.setGenres(book.getGenres());
         existingBook.setRating(book.getRating());
-        existingBook.setFans(book.getFans());
-        existingBook.setReviews(book.getReviews());
+//        existingBook.setFans(book.getFans());
+//        existingBook.setReviews(book.getReviews());
     }
 
 }

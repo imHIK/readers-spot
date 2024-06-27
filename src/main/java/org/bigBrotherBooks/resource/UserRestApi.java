@@ -7,6 +7,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.bigBrotherBooks.dto.UserDTO;
 import org.bigBrotherBooks.dto.UserProfileUpdateDTO;
+import org.bigBrotherBooks.model.Review;
 import org.bigBrotherBooks.model.User;
 import org.bigBrotherBooks.service.UserService;
 import org.slf4j.Logger;
@@ -78,9 +79,9 @@ if(user == null) {
     }
 
     @GET
-    @Path("/users")
+    @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUsers(@Valid List<String> userNames) {
+    public Response getUsers(@QueryParam("user_names") List<String> userNames) {
         List<UserDTO> users = userService.getUserDTOs(userNames);
         return Response.ok(users).build();
     }
@@ -171,6 +172,26 @@ if(user == null) {
         if (userService.modifyFavoriteAuthor(userName, authorId, false))
             return Response.ok("Author " + authorId + " removed from favorites of " + userName).build();
         return Response.status(Response.Status.NOT_FOUND).entity("User or Author not found").build();
+    }
+
+    @POST
+    @Path("/addReview/{user_name}/{book_id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addReview(@PathParam("user_name") String userName, @PathParam("book_id") int bookId, @Valid Review review) {
+        LOGGER.info("Add Review");
+        if (userService.addReview(userName, bookId, review))
+            return Response.ok("Review added by " + userName + " for Book " + bookId).build();
+        return Response.status(Response.Status.NOT_FOUND).entity("User or Book not found").build();
+    }
+
+    @POST
+    @Path("/removeReview/{user_name}/{review_id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response removeReview(@PathParam("user_name") String userName, @PathParam("review_id") int reviewId) {
+        LOGGER.info("Remove Review");
+        if (userService.removeReview(userName, reviewId))
+            return Response.ok("Review " + reviewId + " removed by " + userName).build();
+        return Response.status(Response.Status.NOT_FOUND).entity("User or Review not found").build();
     }
 
 }

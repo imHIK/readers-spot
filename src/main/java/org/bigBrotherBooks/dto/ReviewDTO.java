@@ -1,45 +1,13 @@
-package org.bigBrotherBooks.model;
+package org.bigBrotherBooks.dto;
 
-import jakarta.persistence.*;
 import org.bigBrotherBooks.configModels.Star;
 
-/**
- * Represents a review of a book by a user.
- * <p>
- * Fields
- * reviewId: int
- * book: Book -> many to one
- * user: User -> many to one
- * text: String
- * rating: Star
- * time: Long
- */
+public class ReviewDTO {
 
-@Entity
-public class Review {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reviewId;
-
-    @ManyToOne
-    @JoinColumn(name = "book_id")
-    private Book book;
-
-    @ManyToOne
-    @JoinColumn(name = "user_name")
-    private User user;
-
-    @Column
     private String text;
-
-    @Column
     private Star rating;
-
-    @Column
     private Long time; // epoch time
-
-    @Column
     private int likes;
 
     public int getReviewId() {
@@ -74,22 +42,6 @@ public class Review {
         this.time = time;
     }
 
-    public Book getBook() {
-        return book;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public int getLikes() {
         return likes;
     }
@@ -100,10 +52,8 @@ public class Review {
 
     @Override
     public String toString() {
-        return "Review{" +
+        return "ReviewDTO{" +
                 "reviewId=" + reviewId +
-                ", book=" + book +
-                ", user=" + user +
                 ", text='" + text + '\'' +
                 ", rating=" + rating +
                 ", time=" + time +

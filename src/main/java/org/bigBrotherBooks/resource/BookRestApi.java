@@ -82,4 +82,15 @@ public class BookRestApi {
         return Response.ok(bookService.getAllBookDTOs()).build();
     }
 
+    @GET
+    @Path("/detailed/{book_id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFullBook(@PathParam("book_id") int bookId) {
+        Object book = bookService.getFullBook(bookId);
+        if (book == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Book " + bookId + " not found").build();
+        }
+        return Response.ok(book).build();
+    }
+
 }

@@ -13,7 +13,7 @@ import java.util.Set;
  * email: String
  * phone: String
  * address: String
- * isAdmin: boolean
+ * isAdmin: boolean  (not reflecting in db)
  * isDeleted: boolean
  * favoriteBooks: Set<Book>  -> many to many
  * favoriteAuthors: Set<Author> -> many to many
@@ -50,7 +50,7 @@ public class User {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "favorite_books",
             joinColumns = @JoinColumn(name = "user_name"),
@@ -81,11 +81,15 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RentRequest> rentRequests;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Review> reviews;
+
     public User() {
         favoriteBooks = new HashSet<>();
         favoriteAuthors = new HashSet<>();
         following = new HashSet<>();
         followedBy = new HashSet<>();
+        reviews = new HashSet<>();
     }
 
     public String getUserName() {
@@ -230,6 +234,26 @@ public class User {
 
     public void setRentRequests(Set<RentRequest> rentRequests) {
         this.rentRequests = rentRequests;
+    }
+
+    public Set<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+        review.setUser(this);
+    }
+
+    public void removeReview(Review review) {
+        if (reviews.contains(review)) {
+            reviews.remove(review);
+            review.setUser(null);
+        }
     }
 
     @Override

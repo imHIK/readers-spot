@@ -66,6 +66,18 @@ public class Author {
         this.books = books;
     }
 
+    public void addBook(Book book) {
+        books.add(book);
+        book.setAuthor(this);
+    }
+
+    public void removeBook(Book book) {
+        if (books.contains(book)) {   // check so we dont set the book's author null by mistake
+            books.remove(book);
+            book.setAuthor(null);
+        }
+    }
+
     public String getAbout() {
         return about;
     }
