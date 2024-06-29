@@ -9,7 +9,7 @@ import java.util.List;
 
 @Transactional
 @Singleton
-public class UserRepository implements PanacheRepositoryBase<User, Long> {
+public class UserRepository implements PanacheRepositoryBase<User, String> {
     public List<User> findBulk(List<String> userNames) {
         return list("userName in ?1", userNames);
     }
