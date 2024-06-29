@@ -9,8 +9,6 @@ public class UserProfileUpdateDTO {
 
     @NotBlank(message = "Name is required")
     public String name;
-    @NotBlank(message = "Username is required")
-    public String username;
     @Email(message = "Invalid email")
     public String email;
     @Pattern(regexp = "^\\+(?:[0-9] ?){6,14}[0-9]$", message = "Valid phone number is required")
@@ -26,14 +24,6 @@ public class UserProfileUpdateDTO {
 
     public void setName(@NotBlank(message = "Name is required") String name) {
         this.name = name;
-    }
-
-    public @NotBlank(message = "Username is required") String getUsername() {
-        return username;
-    }
-
-    public void setUsername(@NotBlank(message = "Username is required") String username) {
-        this.username = username;
     }
 
     public @Email(message = "Invalid email") String getEmail() {
@@ -60,4 +50,13 @@ public class UserProfileUpdateDTO {
         this.address = address;
     }
 
+    @Override
+    public String toString() {
+        return "UserProfileUpdateDTO{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
 }

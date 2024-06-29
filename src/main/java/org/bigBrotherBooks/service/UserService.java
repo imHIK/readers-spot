@@ -26,39 +26,37 @@ public class UserService {
         this.authorService = authorService;
     }
 
-    @Transactional
     public User getUserById(String userName) {
-        return userRepo.find("userName", userName).firstResult();
+        return userRepo.findById(userName);
     }
 
-    @Transactional
     public UserDTO getUserDTO(String userName) {
         User user = getUserById(userName);
         return mapToUserDTO(user);
     }
 
-    @Transactional
-    public void saveUser(User user) {
+    public void saveUser(UserDTO userDTO) {
+        User user = new User();
+        mapToUser(userDTO, user);
         userRepo.persist(user);
     }
 
-    @Transactional
     public boolean deleteUser(String userName) {
         User user = getUserById(userName);
         if (user == null) {
             return false;
         }
-        userRepo.delete(user);
+        userRepo.deleteById(userName);
         return true;
     }
 
     @Transactional
-    public boolean updateUser(User user) {
-        User existingUser = getUserById(user.getUserName());
-        if (existingUser == null) {
+    public boolean updateUser(UserDTO userDTO) {
+        User user = getUserById(userDTO.getUserName());
+        if (user == null) {
             return false;
         }
-        mapUserDetails(user, existingUser);   // not mapping the relational fields, need to think here
+        mapToUser(userDTO, user);   // not mapping the relational fields, need to think here
         return true;
     }
 
@@ -93,8 +91,8 @@ public class UserService {
     }
 
     @Transactional
-    public boolean updateProfile(UserProfileUpdateDTO userProfileUpdateDTO) {
-        User user = getUserById(userProfileUpdateDTO.getUsername());
+    public boolean updateProfile(String username, UserProfileUpdateDTO userProfileUpdateDTO) {
+        User user = getUserById(username);
         if (user == null) {
             return false;
         }
@@ -110,7 +108,7 @@ public class UserService {
         User user = getUserById(userName);
         Book book;
         if (isAdded) {
-            book = bookService.getBook(bookId);
+            book = bookService.getBookById(bookId);
         } else {
             book = user.getFavoriteBooks().stream().filter(b -> b.getBookId() == bookId).findFirst().orElse(null);
         }
@@ -177,20 +175,15 @@ public class UserService {
         return new UserDTO(user.getUserName(), user.getPassword(), user.getName(), user.getEmail(), user.getPhone(), user.getAddress(), user.isAdmin(), user.isDeleted());
     }
 
-    private void mapUserDetails(User user, User existingUser) {
-        existingUser.setName(user.getName());
-        existingUser.setPassword(user.getPassword());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPhone(user.getPhone());
-        existingUser.setAddress(user.getAddress());
-        existingUser.setDeleted(user.isDeleted());
-        existingUser.setAdmin(user.isAdmin());
-//        existingUser.setFavoriteBooks(user.getFavoriteBooks());
-//        existingUser.setFavoriteAuthors(user.getFavoriteAuthors());
-//        existingUser.setFollowing(user.getFollowing());
-//        existingUser.setFollowedBy(user.getFollowedBy());
-//        existingUser.setRentRequests(user.getRentRequests());
+    private void mapToUser(UserDTO userDTO, User user) {
+        user.setUserName(userDTO.getUserName());
+        user.setName(userDTO.getName());
+        user.setPassword(userDTO.getPassword());
+        user.setEmail(userDTO.getEmail());
+        user.setPhone(userDTO.getPhone());
+        user.setAddress(userDTO.getAddress());
+        user.setAdmin(userDTO.isAdmin());
+        user.setDeleted(userDTO.isDeleted());
     }
-
 
 }

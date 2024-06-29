@@ -7,7 +7,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.bigBrotherBooks.dto.BookDTO;
 import org.bigBrotherBooks.dto.ReviewDTO;
-import org.bigBrotherBooks.model.Book;
 import org.bigBrotherBooks.service.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,7 @@ import java.util.List;
 public class BookRestApi {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BookRestApi.class);
-    private BookService bookService;
+    private final BookService bookService;
 
     @Inject
     BookRestApi(BookService bookService) {
@@ -35,14 +34,10 @@ public class BookRestApi {
     @POST
     @Path("/save")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response saveBook(@Valid Book book) {
+    public Response saveBook(@Valid BookDTO bookDTO) {
         LOGGER.info("Save Book");
-        if (book == null) {
-            bookService.saveBook(bookService.getDummyBook());
-            return Response.status(Response.Status.ACCEPTED).entity("Book not passed, Dummy Book saved").build();
-        }
-        bookService.saveBook(book);
-        return Response.status(Response.Status.CREATED).entity("Book " + book.getBookId() + " saved Successfully").build();
+        bookService.saveBook(bookDTO);
+        return Response.status(Response.Status.CREATED).entity("Book " + bookDTO.getName() + " saved Successfully").build();
     }
 
     @GET
@@ -66,16 +61,12 @@ public class BookRestApi {
     @PUT
     @Path("/update")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateBook(@Valid Book book) {
+    public Response updateBook(@Valid BookDTO bookDTO) {
         LOGGER.info("Update Book");
-        if (book == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Book not passed").build();
+        if (bookService.updateBook(bookDTO)) {
+            return Response.ok("Book " + bookDTO.getBookId() + " Updated Successfully").build();
         }
-        Book updatedBook = bookService.updateBook(book);
-        if (updatedBook == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Book not found").build();
-        }
-        return Response.ok("Book " + book.getBookId() + " Updated Successfully").build();
+        return Response.status(Response.Status.NOT_FOUND).entity("Book not found").build();
     }
 
     @GET
