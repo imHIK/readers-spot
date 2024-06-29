@@ -24,17 +24,16 @@ public class AuthorService {
         this.bookService = bookService;
     }
 
-    @Transactional
-    public void saveAuthor(Author author){
+    public void saveAuthor(AuthorDTO authorDTO) {
+        Author author = new Author();
+        mapToAuthor(authorDTO, author);
         authorRepo.persist(author);
     }
 
-    @Transactional
     public Author getAuthor(int authorId){
         return authorRepo.findById((long)authorId);
     }
 
-    @Transactional
     public AuthorDTO getAuthorDTO(int authorId) {
         Author author = getAuthor(authorId);
         if (author == null) {
@@ -43,33 +42,29 @@ public class AuthorService {
         return mapToAuthorDTO(author);
     }
 
-
     @Transactional
-    public Author updateAuthor(Author author) {
-        Author existingAuthor = getAuthor(author.getAuthorId());
-        if (existingAuthor == null) {
-            return null;
+    public boolean updateAuthor(AuthorDTO authorDTO) {
+        Author author = getAuthor(authorDTO.getAuthorId());
+        if (author == null) {
+            return false;
         }
-        mapAuthorDetails(author, existingAuthor);   // transactional operation, so changes in the table without update call
-        return author;
+        mapToAuthor(authorDTO, author);   // transactional operation, so changes in the table without update call
+        return true;
     }
 
-    @Transactional
     public boolean deleteAuthor(int authorId){
         Author author = getAuthor(authorId);
         if(author == null){
             return false;
         }
-        authorRepo.delete(author);
+        authorRepo.deleteById((long) authorId);
         return true;
     }
 
-    @Transactional
     public List<Author> getAllAuthors() {
         return authorRepo.listAll();
     }
 
-    @Transactional
     public List<AuthorDTO> getAllAuthorDTOs() {
         List<Author> authors = getAllAuthors();
         return authors.stream().map(AuthorService::mapToAuthorDTO).toList();
@@ -77,7 +72,7 @@ public class AuthorService {
 
     @Transactional
     public int publishBook(int authorId, int bookId) {
-        Book book = bookService.getBook(bookId);
+        Book book = bookService.getBookById(bookId);
         if (book == null) {
             return 0;
         }
@@ -112,11 +107,11 @@ public class AuthorService {
         return new AuthorDTO(author.getAuthorId(), author.getName(), author.getAbout());
     }
 
-    private void mapAuthorDetails(Author author, Author existingAuthor) {
-        existingAuthor.setName(author.getName());
-        existingAuthor.setAbout(author.getAbout());
-//        existingAuthor.setBooks(author.getBooks());
-//        existingAuthor.setFans(author.getFans());
+    private static void mapToAuthor(AuthorDTO authorDTO, Author author) {
+        author.setName(authorDTO.getName());
+        author.setAbout(authorDTO.getAbout());
+//        author.setBooks(authorDTO.getBooks());
+//        author.setFans(authorDTO.getFans());
     }
 
 }

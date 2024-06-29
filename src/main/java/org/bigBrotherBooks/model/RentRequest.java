@@ -1,7 +1,7 @@
 package org.bigBrotherBooks.model;
 
 import jakarta.persistence.*;
-import org.bigBrotherBooks.configModels.Condition;
+import org.bigBrotherBooks.configModels.BookCondition;
 import org.bigBrotherBooks.configModels.Status;
 
 @Entity
@@ -36,10 +36,12 @@ public class RentRequest {
     private Long returnTime;
 
     @Column
-    private Condition issueCondition;
+    @Enumerated(jakarta.persistence.EnumType.STRING)
+    private BookCondition issueBookCondition;
 
     @Column
-    private Condition returnCondition;
+    @Enumerated(jakarta.persistence.EnumType.STRING)
+    private BookCondition returnBookCondition;
 
     public int getReqId() {
         return reqId;
@@ -81,20 +83,20 @@ public class RentRequest {
         this.returnTime = returnTime;
     }
 
-    public Condition getIssueCondition() {
-        return issueCondition;
+    public BookCondition getIssueCondition() {
+        return issueBookCondition;
     }
 
-    public void setIssueCondition(Condition issueCondition) {
-        this.issueCondition = issueCondition;
+    public void setIssueCondition(BookCondition issueBookCondition) {
+        this.issueBookCondition = issueBookCondition;
     }
 
-    public Condition getReturnCondition() {
-        return returnCondition;
+    public BookCondition getReturnCondition() {
+        return returnBookCondition;
     }
 
-    public void setReturnCondition(Condition returnCondition) {
-        this.returnCondition = returnCondition;
+    public void setReturnCondition(BookCondition returnBookCondition) {
+        this.returnBookCondition = returnBookCondition;
     }
 
     public User getUser() {
@@ -132,8 +134,8 @@ public class RentRequest {
                 ", requestTime=" + requestTime +
                 ", issueTime=" + issueTime +
                 ", returnTime=" + returnTime +
-                ", issueCondition=" + issueCondition +
-                ", returnCondition=" + returnCondition +
+                ", issueCondition=" + issueBookCondition +
+                ", returnCondition=" + returnBookCondition +
                 '}';
     }
 }

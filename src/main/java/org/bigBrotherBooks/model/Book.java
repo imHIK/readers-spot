@@ -153,6 +153,18 @@ public class Book {
         this.warehouseStock = warehouseStock;
     }
 
+    public void addWarehouseStock(Stock stock) {
+        warehouseStock.add(stock);
+        stock.setBook(this);
+    }
+
+    public void removeWarehouseStock(Stock stock) {
+        if (warehouseStock.contains(stock)) {
+            warehouseStock.remove(stock);
+            stock.setBook(null);
+        }
+    }
+
     @Override
     public String toString() {
         return "Book{" +

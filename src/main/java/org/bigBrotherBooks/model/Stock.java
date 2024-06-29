@@ -1,6 +1,7 @@
 package org.bigBrotherBooks.model;
 
 import jakarta.persistence.*;
+import org.bigBrotherBooks.configModels.BookCondition;
 
 import java.util.Objects;
 
@@ -21,6 +22,14 @@ public class Stock {
     private Book book;
 
     private int quantity;
+
+    public Stock() {
+    }
+
+    public Stock(StockId stockId, int quantity) {
+        this.stockId = stockId;
+        this.quantity = quantity;
+    }
 
     public StockId getStockId() {
         return stockId;
@@ -54,17 +63,30 @@ public class Stock {
         this.quantity = quantity;
     }
 
+    @Override
+    public String toString() {
+        return "Stock{" +
+                "stockId=" + stockId +
+                ", warehouse=" + warehouse +
+                ", book=" + book +
+                ", quantity=" + quantity +
+                '}';
+    }
+
     @Embeddable
     public static class StockId {
         int warehouseId;
         int bookId;
+        @Enumerated(jakarta.persistence.EnumType.STRING)
+        BookCondition bookCondition;
 
         public StockId() {
         }
 
-        public StockId(int warehouseId, int bookId) {
+        public StockId(int warehouseId, int bookId, BookCondition bookCondition) {
             this.warehouseId = warehouseId;
             this.bookId = bookId;
+            this.bookCondition = bookCondition;
         }
 
         public int getWarehouseId() {
@@ -83,17 +105,25 @@ public class Stock {
             this.bookId = bookId;
         }
 
+        public BookCondition getCondition() {
+            return bookCondition;
+        }
+
+        public void setCondition(BookCondition bookCondition) {
+            this.bookCondition = bookCondition;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             StockId stockId = (StockId) o;
-            return warehouseId == stockId.warehouseId && bookId == stockId.bookId;
+            return warehouseId == stockId.warehouseId && bookId == stockId.bookId && bookCondition == stockId.bookCondition;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(warehouseId, bookId);
+            return Objects.hash(warehouseId, bookId, bookCondition);
         }
     }
 }
