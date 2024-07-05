@@ -8,8 +8,11 @@ import org.bigBrotherBooks.dto.*;
 import org.bigBrotherBooks.model.Author;
 import org.bigBrotherBooks.model.Book;
 import org.bigBrotherBooks.model.User;
+import org.bigBrotherBooks.repository.UserRepository;
 
 import java.util.List;
+
+import static org.bigBrotherBooks.service.AuthService.encryptPassword;
 
 
 @Singleton
@@ -172,17 +175,18 @@ public class UserService {
     }
 
     public static UserDTO mapToUserDTO(User user) {
-        return new UserDTO(user.getUserName(), user.getPassword(), user.getName(), user.getEmail(), user.getPhone(), user.getAddress(), user.isAdmin(), user.isDeleted());
+        return new UserDTO(user.getUserName(), user.getPassword(), user.getName(), user.getEmail(), user.getPhone(), user.getAddress(), user.getRoles(), user.isDeleted());
     }
 
     private void mapToUser(UserDTO userDTO, User user) {
         user.setUserName(userDTO.getUserName());
         user.setName(userDTO.getName());
-        user.setPassword(userDTO.getPassword());
+        user.setPassword(encryptPassword(userDTO.getPassword()));
         user.setEmail(userDTO.getEmail());
         user.setPhone(userDTO.getPhone());
         user.setAddress(userDTO.getAddress());
-        user.setAdmin(userDTO.isAdmin());
+        user.setRoles(userDTO.getRoles());
+//        user.setAdmin(userDTO.isAdmin());
         user.setDeleted(userDTO.isDeleted());
     }
 

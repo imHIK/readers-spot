@@ -1,5 +1,7 @@
 package org.bigBrotherBooks.dto;
 
+import java.util.Set;
+
 public class UserDTO {
 
     private String userName;
@@ -8,20 +10,20 @@ public class UserDTO {
     private String email;  // email must be validated later
     private String phone;  // phone must be validated later
     private String address;
-    private boolean isAdmin;
+    private Set<String> roles;
     private boolean isDeleted;
 
     public UserDTO() {
     }
 
-    public UserDTO(String userName, String password, String name, String email, String phone, String address, boolean isAdmin, boolean isDeleted) {
+    public UserDTO(String userName, String password, String name, String email, String phone, String address, Set<String> roles, boolean isDeleted) {
         this.userName = userName;
         this.password = password;
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.isAdmin = isAdmin;
+        this.roles = roles;
         this.isDeleted = isDeleted;
     }
 
@@ -73,20 +75,20 @@ public class UserDTO {
         this.address = address;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
-
     public boolean isDeleted() {
         return isDeleted;
     }
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 
     @Override
@@ -98,7 +100,7 @@ public class UserDTO {
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
-                ", isAdmin=" + isAdmin +
+                ", roles=" + roles +
                 ", isDeleted=" + isDeleted +
                 '}';
     }

@@ -44,11 +44,11 @@ public class User {
     @Column
     private String address;
 
-    @Column(name = "is_admin")
-    private boolean isAdmin;
-
     @Column(name = "is_deleted")
     private boolean isDeleted;
+
+    @Column
+    private Set<String> roles;
 
     @ManyToMany
     @JoinTable(
@@ -138,14 +138,6 @@ public class User {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
     }
 
     public boolean isDeleted() {
@@ -256,6 +248,14 @@ public class User {
         }
     }
 
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -265,14 +265,14 @@ public class User {
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
-                ", isAdmin=" + isAdmin +
                 ", isDeleted=" + isDeleted +
+                ", roles=" + roles +
                 ", favoriteBooks=" + favoriteBooks +
                 ", favoriteAuthors=" + favoriteAuthors +
                 ", following=" + following +
                 ", followedBy=" + followedBy +
                 ", rentRequests=" + rentRequests +
+                ", reviews=" + reviews +
                 '}';
     }
-
 }

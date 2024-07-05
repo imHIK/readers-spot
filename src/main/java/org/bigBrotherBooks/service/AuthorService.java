@@ -9,14 +9,15 @@ import org.bigBrotherBooks.dto.BookDTO;
 import org.bigBrotherBooks.dto.UserDTO;
 import org.bigBrotherBooks.model.Author;
 import org.bigBrotherBooks.model.Book;
+import org.bigBrotherBooks.repository.AuthorRepository;
 
 import java.util.List;
 
 @Singleton
 public class AuthorService {
 
-    private AuthorRepository authorRepo;
-    private BookService bookService;
+    private final AuthorRepository authorRepo;
+    private final BookService bookService;
 
     @Inject
     public AuthorService(AuthorRepository authorRepo, BookService bookService) {

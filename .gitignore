@@ -37,3 +37,9 @@ nb-configuration.xml
 
 # Plugin directory
 /.quarkus/cli/plugins/
+
+#private key
+*.pem
+
+# config
+application.properties
