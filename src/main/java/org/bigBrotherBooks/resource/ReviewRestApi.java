@@ -6,7 +6,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.bigBrotherBooks.dto.ReviewDTO;
-import org.bigBrotherBooks.model.Review;
 import org.bigBrotherBooks.service.ReviewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class ReviewRestApi {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewRestApi.class);
-    private ReviewService reviewService;
+    private final ReviewService reviewService;
 
     @Inject
     public ReviewRestApi(ReviewService reviewService) {
@@ -25,9 +24,9 @@ public class ReviewRestApi {
     @POST
     @Path("/{user_name}/{book_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addReview(@PathParam("user_name") String userName, @PathParam("book_id") int bookId, @Valid Review review) {
+    public Response addReview(@PathParam("user_name") String userName, @PathParam("book_id") int bookId, @Valid ReviewDTO reviewDTO) {
         LOGGER.info("Add Review");
-        if (reviewService.addReview(userName, bookId, review))
+        if (reviewService.addReview(userName, bookId, reviewDTO))
             return Response.ok("Review added by " + userName + " for Book " + bookId).build();
         return Response.status(Response.Status.NOT_FOUND).entity("User or Book not found").build();
     }
@@ -45,10 +44,10 @@ public class ReviewRestApi {
     @PUT
     @Path("/{user_name}/{book_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateReview(@PathParam("user_name") String userName, @PathParam("book_id") int bookId, @Valid Review review) {
+    public Response updateReview(@PathParam("user_name") String userName, @PathParam("book_id") int bookId, @Valid ReviewDTO reviewDTO) {
         LOGGER.info("Update Review");
-        if (reviewService.updateReview(userName, bookId, review))
-            return Response.ok("Review " + review.getReviewId() + " updated by " + userName).build();
+        if (reviewService.updateReview(userName, bookId, reviewDTO))
+            return Response.ok("Review " + reviewDTO.getReviewId() + " updated by " + userName).build();
         return Response.status(Response.Status.NOT_FOUND).entity("User or Review not found").build();
     }
 

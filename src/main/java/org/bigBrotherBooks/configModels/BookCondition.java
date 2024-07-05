@@ -1,6 +1,6 @@
 package org.bigBrotherBooks.configModels;
 
-public enum Condition {
+public enum BookCondition {
     NEW,
     GOOD,
     MODERATE,

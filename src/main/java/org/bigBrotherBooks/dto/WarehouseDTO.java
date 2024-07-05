@@ -1,50 +1,32 @@
-package org.bigBrotherBooks.model;
+package org.bigBrotherBooks.dto;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
-import java.util.Set;
+public class WarehouseDTO {
 
-@Entity
-public class Warehouse {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int warehouseId;
-
-    @Column
+    @NotNull(message = "Name cannot be null")
     private String name;
-
-    @Column
+    @NotNull(message = "City cannot be null")
     private String city;
-
-    @Column
+    @NotNull(message = "Area cannot be null")
     private String area;
-
-    @Column
+    @NotNull(message = "Address cannot be null")
     private String address;
-
-    @Column
+    @Pattern(regexp = "^\\+(?:[0-9] ?){6,14}[0-9]$", message = "Valid phone number is required")
     private String phone;
-
-    @Column
-    private String email;
-
-    @Column
+    @Email(message = "Invalid email")
+    public String email;
     private String managerName;
-
-    @Column
     private Double rating;
 
-    @OneToMany(mappedBy = "warehouse")
-    private Set<RentRequest> rentRequests;
-
-    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Stock> bookStock;
-
-    public Warehouse() {
+    public WarehouseDTO() {
     }
 
-    public Warehouse(String name, String city, String area, String address, String phone, String email, String managerName, Double rating) {
+    public WarehouseDTO(int warehouseId, String name, String city, String area, String address, String phone, String email, String managerName, Double rating) {
+        this.warehouseId = warehouseId;
         this.name = name;
         this.city = city;
         this.area = area;
@@ -127,37 +109,9 @@ public class Warehouse {
         this.rating = rating;
     }
 
-    public Set<RentRequest> getRentRequests() {
-        return rentRequests;
-    }
-
-    public void setRentRequests(Set<RentRequest> rentRequests) {
-        this.rentRequests = rentRequests;
-    }
-
-    public Set<Stock> getBookStock() {
-        return bookStock;
-    }
-
-    public void setBookStock(Set<Stock> bookStock) {
-        this.bookStock = bookStock;
-    }
-
-    public void addBookStock(Stock stock) {
-        bookStock.add(stock);
-        stock.setWarehouse(this);
-    }
-
-    public void removeBookStock(Stock stock) {
-        if (bookStock.contains(stock)) {
-            bookStock.remove(stock);
-            stock.setWarehouse(null);
-        }
-    }
-
     @Override
     public String toString() {
-        return "Warehouse{" +
+        return "WarehouseDTO{" +
                 "warehouseId=" + warehouseId +
                 ", name='" + name + '\'' +
                 ", city='" + city + '\'' +
@@ -167,8 +121,6 @@ public class Warehouse {
                 ", email='" + email + '\'' +
                 ", managerName='" + managerName + '\'' +
                 ", rating=" + rating +
-                ", rentRequests=" + rentRequests +
-                ", bookStock=" + bookStock +
                 '}';
     }
 }

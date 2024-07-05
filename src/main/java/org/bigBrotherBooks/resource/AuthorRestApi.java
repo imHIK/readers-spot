@@ -6,7 +6,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.bigBrotherBooks.dto.AuthorDTO;
-import org.bigBrotherBooks.model.Author;
 import org.bigBrotherBooks.service.AuthorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,7 @@ import org.slf4j.LoggerFactory;
 public class AuthorRestApi {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthorRestApi.class);
-    private AuthorService authorService;
+    private final AuthorService authorService;
 
     @Inject
     AuthorRestApi(AuthorService authorService) {
@@ -33,14 +32,10 @@ public class AuthorRestApi {
     @POST
     @Path("/save")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response saveAuthor(@Valid Author author) {
+    public Response saveAuthor(@Valid AuthorDTO authorDTO) {
         LOGGER.info("Save Author");
-        if (author == null) {
-            authorService.saveAuthor(authorService.getDummyAuthor());
-            return Response.status(Response.Status.ACCEPTED).entity("Author not passed, Dummy Author saved").build();
-        }
-        authorService.saveAuthor(author);
-        return Response.status(Response.Status.CREATED).entity("Author " + author.getAuthorId() + " saved Successfully").build();
+        authorService.saveAuthor(authorDTO);
+        return Response.ok("Author " + authorDTO.getName() + " saved Successfully").build();
     }
 
     @GET
@@ -62,18 +57,14 @@ public class AuthorRestApi {
     }
 
     @PUT
-    @Path("/update")
+    @Path("/update")                                    // take id explicitly or not
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateAuthor(@Valid Author author) {
+    public Response updateAuthor(@Valid AuthorDTO authorDTO) {
         LOGGER.info("Update Author");
-        if (author == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Author not passed").build();
+        if (authorService.updateAuthor(authorDTO)) {
+            return Response.ok("Author " + authorDTO.getAuthorId() + " Updated Successfully").build();
         }
-        Author updatedAuthor = authorService.updateAuthor(author);
-        if (updatedAuthor == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Author not found").build();
-        }
-        return Response.ok("Author " + author.getAuthorId() + " Updated Successfully").build();
+        return Response.status(Response.Status.NOT_FOUND).entity("Author not found").build();
     }
 
     @GET

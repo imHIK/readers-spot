@@ -8,7 +8,6 @@ import jakarta.ws.rs.core.Response;
 import org.bigBrotherBooks.dto.ReviewDTO;
 import org.bigBrotherBooks.dto.UserDTO;
 import org.bigBrotherBooks.dto.UserProfileUpdateDTO;
-import org.bigBrotherBooks.model.User;
 import org.bigBrotherBooks.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,7 @@ import java.util.List;
 public class UserRestApi {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRestApi.class);
-    private UserService userService;
+    private final UserService userService;
 
     @Inject
     public UserRestApi(UserService userService) {
@@ -48,21 +47,21 @@ if(user == null) {
     @POST
     @Path("/save")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response saveUser(@Valid User user) {
+    public Response saveUser(@Valid UserDTO userDTO) {
         LOGGER.info("Save User");
-        userService.saveUser(user);
-        return Response.status(Response.Status.CREATED).entity("User " + user.getUserName() + " saved successfully").build();
+        userService.saveUser(userDTO);
+        return Response.status(Response.Status.CREATED).entity("User " + userDTO.getUserName() + " saved successfully").build();
     }
 
     @POST
     @Path("/update")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(@Valid User user) {
+    public Response updateUser(@Valid UserDTO userDTO) {
         LOGGER.info("Update User");
-        if (userService.updateUser(user)) {
-            return Response.ok("User " + user.getUserName() + " updated successfully").build();
+        if (userService.updateUser(userDTO)) {
+            return Response.ok("User " + userDTO.getUserName() + " updated successfully").build();
         }
-        return Response.status(Response.Status.NOT_FOUND).entity("User " + user.getUserName() + " not found").build();
+        return Response.status(Response.Status.NOT_FOUND).entity("User " + userDTO.getUserName() + " not found").build();
     }
 
     @DELETE      // TODO: hard and soft delete
@@ -70,12 +69,10 @@ if(user == null) {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteUser(@PathParam("user_name") String userName) {
         LOGGER.info("Delete User");
-        User user = userService.getUserById(userName);
-        if(user == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("User " + userName + " not found").build();
+        if (userService.deleteUser(userName)) {
+            return Response.ok("User " + userName + " deleted successfully").build();
         }
-        userService.deleteUser(userName);
-        return Response.ok("User " + userName + " deleted successfully").build();
+        return Response.status(Response.Status.NOT_FOUND).entity("User " + userName + " not found").build();
     }
 
     @GET
@@ -115,12 +112,14 @@ if(user == null) {
     }
 
     @POST
-    @Path("/updateProfile")
+    @Path("/updateProfile/{user_name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProfile(@Valid UserProfileUpdateDTO userProfileUpdateDTO) {
+    public Response updateProfile(@PathParam("user_name") String userName, @Valid UserProfileUpdateDTO userProfileUpdateDTO) {
         LOGGER.info("Update Profile");
-        userService.updateProfile(userProfileUpdateDTO);
-        return Response.ok("Profile updated successfully").build();
+        if (userService.updateProfile(userName, userProfileUpdateDTO)) {
+            return Response.ok("Profile updated successfully").build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).entity("User " + userName + " not found").build();
     }
 
     @GET
