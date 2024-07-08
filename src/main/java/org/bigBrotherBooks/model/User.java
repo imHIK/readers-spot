@@ -228,6 +228,18 @@ public class User {
         this.rentRequests = rentRequests;
     }
 
+    public void addRentRequest(RentRequest rentRequest) {
+        rentRequests.add(rentRequest);
+        rentRequest.setUser(this);
+    }
+
+    public void removeRentRequest(RentRequest rentRequest) {
+        if (rentRequests.contains(rentRequest)) {
+            rentRequests.remove(rentRequest);
+            rentRequest.setUser(null);
+        }
+    }
+
     public Set<Review> getReviews() {
         return reviews;
     }

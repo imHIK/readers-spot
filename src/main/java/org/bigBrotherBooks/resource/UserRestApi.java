@@ -114,6 +114,22 @@ if(user == null) {
     }
 
     @POST
+    @Path("/followers/{user_name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFollowers(@PathParam("user_name") String userName) {
+        List<UserDTO> followers = userService.getFollowers(userName);
+        return Response.ok(followers).build();
+    }
+
+    @POST
+    @Path("/following/{user_name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFollowing(@PathParam("user_name") String userName) {
+        List<UserDTO> following = userService.getFollowing(userName);
+        return Response.ok(following).build();
+    }
+
+    @POST
     @Path("/updateProfile/{user_name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateProfile(@PathParam("user_name") String userName, @Valid UserProfileUpdateDTO userProfileUpdateDTO) {
