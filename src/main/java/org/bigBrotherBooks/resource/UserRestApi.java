@@ -1,5 +1,6 @@
 package org.bigBrotherBooks.resource;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -84,6 +85,7 @@ if(user == null) {
     }
 
     @GET
+    @RolesAllowed("ADMIN")
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllUsers() {

@@ -9,6 +9,7 @@ import org.bigBrotherBooks.dto.BookDTO;
 import org.bigBrotherBooks.dto.ReviewDTO;
 import org.bigBrotherBooks.dto.UserDTO;
 import org.bigBrotherBooks.model.Book;
+import org.bigBrotherBooks.repository.BookRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

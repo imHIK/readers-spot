@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Stock {
 
     @EmbeddedId
-    StockId stockId;
+    private StockId stockId;
 
     @ManyToOne
     @MapsId("warehouseId")
@@ -20,11 +20,6 @@ public class Stock {
     @MapsId("bookId")
     @JoinColumn(name = "book_id")
     private Book book;
-
-    @MapsId("bookCondition")
-    @Column
-    @Enumerated(EnumType.STRING)
-    private BookCondition condition;
 
     @Column
     private int quantity;
@@ -69,21 +64,12 @@ public class Stock {
         this.quantity = quantity;
     }
 
-    public BookCondition getCondition() {
-        return condition;
-    }
-
-    public void setCondition(BookCondition condition) {
-        this.condition = condition;
-    }
-
     @Override
     public String toString() {
         return "Stock{" +
                 "stockId=" + stockId +
                 ", warehouse=" + warehouse +
                 ", book=" + book +
-                ", condition=" + condition +
                 ", quantity=" + quantity +
                 '}';
     }

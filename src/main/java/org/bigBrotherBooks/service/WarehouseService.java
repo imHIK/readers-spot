@@ -8,6 +8,8 @@ import org.bigBrotherBooks.dto.WarehouseDTO;
 import org.bigBrotherBooks.model.Book;
 import org.bigBrotherBooks.model.Stock;
 import org.bigBrotherBooks.model.Warehouse;
+import org.bigBrotherBooks.repository.StockRepository;
+import org.bigBrotherBooks.repository.WarehouseRepository;
 
 import java.util.List;
 

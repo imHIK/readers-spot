@@ -1,4 +1,4 @@
-package org.bigBrotherBooks.service;
+package org.bigBrotherBooks.repository;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.inject.Singleton;
