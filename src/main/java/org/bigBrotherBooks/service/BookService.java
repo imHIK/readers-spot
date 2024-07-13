@@ -10,15 +10,11 @@ import org.bigBrotherBooks.dto.ReviewDTO;
 import org.bigBrotherBooks.dto.UserDTO;
 import org.bigBrotherBooks.model.Book;
 import org.bigBrotherBooks.repository.BookRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 @Singleton
 public class BookService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(BookService.class);
 
     private BookRepository bookRepo;
 
