@@ -7,9 +7,10 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.bigBrotherBooks.dto.BookDTO;
 import org.bigBrotherBooks.dto.ReviewDTO;
+import org.bigBrotherBooks.logger.LogType;
+import org.bigBrotherBooks.logger.Logger;
+import org.bigBrotherBooks.logger.LoggerFactory;
 import org.bigBrotherBooks.service.BookService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class BookRestApi {
     @Path("/save")
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveBook(@Valid BookDTO bookDTO) {
-        LOGGER.info("Save Book");
+        LOGGER.logThis(LogType.INFO, "Save Book");
         bookService.saveBook(bookDTO);
         return Response.status(Response.Status.CREATED).entity("Book " + bookDTO.getName() + " saved Successfully").build();
     }
@@ -52,7 +53,7 @@ public class BookRestApi {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteBook(@PathParam("id") int bookId) {
-        LOGGER.info("Delete Book");
+        LOGGER.logThis(LogType.INFO, "Delete Book");
         if (bookService.deleteBook(bookId))
             return Response.ok("Book " + bookId + " Deleted Successfully").build();
         return Response.status(Response.Status.NOT_FOUND).entity("Book not found").build();
@@ -62,7 +63,7 @@ public class BookRestApi {
     @Path("/update")
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateBook(@Valid BookDTO bookDTO) {
-        LOGGER.info("Update Book");
+        LOGGER.logThis(LogType.INFO, "Update Book");
         if (bookService.updateBook(bookDTO)) {
             return Response.ok("Book " + bookDTO.getBookId() + " Updated Successfully").build();
         }

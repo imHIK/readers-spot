@@ -9,9 +9,10 @@ import jakarta.ws.rs.core.Response;
 import org.bigBrotherBooks.dto.ReviewDTO;
 import org.bigBrotherBooks.dto.UserDTO;
 import org.bigBrotherBooks.dto.UserProfileUpdateDTO;
+import org.bigBrotherBooks.logger.LogType;
+import org.bigBrotherBooks.logger.Logger;
+import org.bigBrotherBooks.logger.LoggerFactory;
 import org.bigBrotherBooks.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -49,7 +50,7 @@ if(user == null) {
     @Path("/save")
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveUser(@Valid UserDTO userDTO) {
-        LOGGER.info("Save User");
+        LOGGER.logThis(LogType.INFO, "User Saved: {}", () -> userDTO);
         userService.saveUser(userDTO);
         return Response.status(Response.Status.CREATED).entity("User " + userDTO.getUserName() + " saved successfully").build();
     }
@@ -58,7 +59,7 @@ if(user == null) {
     @Path("/update")
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateUser(@Valid UserDTO userDTO) {
-        LOGGER.info("Update User");
+        LOGGER.logThis(LogType.INFO, "User update: {}", userDTO::getUserName);
         if (userService.updateUser(userDTO)) {
             return Response.ok("User " + userDTO.getUserName() + " updated successfully").build();
         }
@@ -69,7 +70,7 @@ if(user == null) {
     @Path("/{user_name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteUser(@PathParam("user_name") String userName) {
-        LOGGER.info("Delete User");
+        LOGGER.logThis(LogType.INFO, "User delete: {}", userName);
         if (userService.deleteUser(userName)) {
             return Response.ok("User " + userName + " deleted successfully").build();
         }
@@ -97,7 +98,7 @@ if(user == null) {
     @Path("/follow/{user_name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response followUser(@PathParam("user_name") String toUserName, @QueryParam("from") String fromUserName) {
-        LOGGER.info("Follow User");
+        LOGGER.logThis(LogType.INFO, "User: {} follow User: {}", fromUserName, toUserName);
         if (userService.followUser(fromUserName, toUserName, true))
             return Response.ok("User " + fromUserName + " is now following " + toUserName).build();
         return Response.status(Response.Status.NOT_FOUND).entity("User or Followed User not found").build();
@@ -107,7 +108,7 @@ if(user == null) {
     @Path("/unfollow/{user_name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response unfollowUser(@PathParam("user_name") String toUserName, @QueryParam("from") String fromUserName) {
-        LOGGER.info("Unfollow User");
+        LOGGER.logThis(LogType.INFO, "User: {} unfollow User: {}", fromUserName, toUserName);
         if (userService.followUser(fromUserName, toUserName, false))
             return Response.ok("User " + fromUserName + " has unfollowed " + toUserName).build();
         return Response.ok("User " + fromUserName + " has unfollowed " + toUserName).build();
@@ -133,7 +134,7 @@ if(user == null) {
     @Path("/updateProfile/{user_name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateProfile(@PathParam("user_name") String userName, @Valid UserProfileUpdateDTO userProfileUpdateDTO) {
-        LOGGER.info("Update Profile");
+        LOGGER.logThis(LogType.INFO, "Update User profile: {}", userName);
         if (userService.updateProfile(userName, userProfileUpdateDTO)) {
             return Response.ok("Profile updated successfully").build();
         }
@@ -155,7 +156,7 @@ if(user == null) {
     @Path("/addFavoriteBook/{user_name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response addFavoriteBook(@PathParam("user_name") String userName, @QueryParam("book_id") int bookId) {
-        LOGGER.info("Add Favorite Book");
+        LOGGER.logThis(LogType.INFO, "Add Favorite Book: {} for User: {}", bookId, userName);
         if (userService.modifyFavoriteBook(userName, bookId, true))
             return Response.ok("Book " + bookId + " added to favorites of " + userName).build();
         return Response.status(Response.Status.NOT_FOUND).entity("User or Book not found").build();
@@ -165,7 +166,7 @@ if(user == null) {
     @Path("/removeFavoriteBook/{user_name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeFavoriteBook(@PathParam("user_name") String userName, @QueryParam("book_id") int bookId) {
-        LOGGER.info("Remove Favorite Book");
+        LOGGER.logThis(LogType.INFO, "Remove Favorite Book: {} for User: {}", bookId, userName);
         if (userService.modifyFavoriteBook(userName, bookId, false))
             return Response.ok("Book " + bookId + " removed from favorites of " + userName).build();
         return Response.status(Response.Status.NOT_FOUND).entity("User or Book not found").build();
@@ -175,7 +176,7 @@ if(user == null) {
     @Path("/addFavoriteAuthor/{user_name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response addFavoriteAuthor(@PathParam("user_name") String userName, @QueryParam("author_id") int authorId) {
-        LOGGER.info("Add Favorite Author");
+        LOGGER.logThis(LogType.INFO, "Add Favorite Author: {} for User: {}", authorId, userName);
         if (userService.modifyFavoriteAuthor(userName, authorId, true))
             return Response.ok("Author " + authorId + " added to favorites of " + userName).build();
         return Response.status(Response.Status.NOT_FOUND).entity("User or Author not found").build();
@@ -185,7 +186,7 @@ if(user == null) {
     @Path("/removeFavoriteAuthor/{user_name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeFavoriteAuthor(@PathParam("user_name") String userName, @QueryParam("author_id") int authorId) {
-        LOGGER.info("Remove Favorite Author");
+        LOGGER.logThis(LogType.INFO, "Remove Favorite Author: {} for User: {}", authorId, userName);
         if (userService.modifyFavoriteAuthor(userName, authorId, false))
             return Response.ok("Author " + authorId + " removed from favorites of " + userName).build();
         return Response.status(Response.Status.NOT_FOUND).entity("User or Author not found").build();
