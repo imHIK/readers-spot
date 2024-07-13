@@ -135,6 +135,18 @@ public class Warehouse {
         this.rentRequests = rentRequests;
     }
 
+    public void addRentRequest(RentRequest rentRequest) {
+        rentRequests.add(rentRequest);
+        rentRequest.setWarehouse(this);
+    }
+
+    public void removeRentRequest(RentRequest rentRequest) {
+        if (rentRequests.contains(rentRequest)) {
+            rentRequests.remove(rentRequest);
+            rentRequest.setWarehouse(null);
+        }
+    }
+
     public Set<Stock> getBookStock() {
         return bookStock;
     }

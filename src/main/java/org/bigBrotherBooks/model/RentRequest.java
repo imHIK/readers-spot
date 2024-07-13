@@ -36,6 +36,9 @@ public class RentRequest {
     private Long returnTime;
 
     @Column
+    private Long price;
+
+    @Column
     @Enumerated(jakarta.persistence.EnumType.STRING)
     private BookCondition issueCondition;
 
@@ -123,6 +126,14 @@ public class RentRequest {
         this.warehouse = warehouse;
     }
 
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "RentRequest{" +
@@ -134,6 +145,7 @@ public class RentRequest {
                 ", requestTime=" + requestTime +
                 ", issueTime=" + issueTime +
                 ", returnTime=" + returnTime +
+                ", price=" + price +
                 ", issueCondition=" + issueCondition +
                 ", returnCondition=" + returnCondition +
                 '}';

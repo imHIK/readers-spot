@@ -1,5 +1,6 @@
 package org.bigBrotherBooks.service;
 
+import io.netty.util.internal.StringUtil;
 import io.smallrye.jwt.build.Jwt;
 import jakarta.inject.Singleton;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -13,6 +14,8 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static org.bigBrotherBooks.constants.GlobalConstants.JWT_VALID_DURATION;
 
 @Singleton
 public class TokenService {
@@ -31,7 +34,7 @@ public class TokenService {
                     .upn(userName)
                     .groups(roles)
                     .issuedAt(System.currentTimeMillis() / 1000)
-                    .expiresAt(System.currentTimeMillis() / 1000 + 3600 * 24 * 7)  // 1 week
+                    .expiresAt(System.currentTimeMillis() / 1000 + JWT_VALID_DURATION)
                     .sign(privateKey);
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,15 +43,15 @@ public class TokenService {
         }
     }
 
-    private RSAPrivateKey getPrivateKey() throws Exception {    // need to take this from a config file or something
+    private RSAPrivateKey getPrivateKey() throws Exception {
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(KEY_LOCATION)) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String privateKeyContent = reader.lines().collect(Collectors.joining(System.lineSeparator()));
 
             String privateKeyPEM = privateKeyContent
-                    .replace("-----BEGIN PRIVATE KEY-----", "")
-                    .replaceAll(System.lineSeparator(), "")
-                    .replace("-----END PRIVATE KEY-----", "");
+                    .replace("-----BEGIN PRIVATE KEY-----", StringUtil.EMPTY_STRING)
+                    .replaceAll(System.lineSeparator(), StringUtil.EMPTY_STRING)
+                    .replace("-----END PRIVATE KEY-----", StringUtil.EMPTY_STRING);
 
             byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyPEM);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");

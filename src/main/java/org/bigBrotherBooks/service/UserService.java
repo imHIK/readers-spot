@@ -164,14 +164,20 @@ public class UserService {
         return true;
     }
 
-    public User getDummyUser() {
-        User user = new User();
-        user.setUserName("dummy_user");
-        user.setPassword("password");
-        user.setName("Dummy User");
-        user.setEmail("abc@example.com");
-        user.setPhone("1234567890");
-        return user;
+    public List<UserDTO> getFollowers(String userName) {
+        User user = getUserById(userName);
+        if (user == null) {
+            return null;
+        }
+        return user.getFollowedBy().stream().map(UserService::mapToUserDTO).toList();
+    }
+
+    public List<UserDTO> getFollowing(String userName) {
+        User user = getUserById(userName);
+        if (user == null) {
+            return null;
+        }
+        return user.getFollowing().stream().map(UserService::mapToUserDTO).toList();
     }
 
     public static UserDTO mapToUserDTO(User user) {
@@ -186,7 +192,6 @@ public class UserService {
         user.setPhone(userDTO.getPhone());
         user.setAddress(userDTO.getAddress());
         user.setRoles(userDTO.getRoles());
-//        user.setAdmin(userDTO.isAdmin());
         user.setDeleted(userDTO.isDeleted());
     }
 
