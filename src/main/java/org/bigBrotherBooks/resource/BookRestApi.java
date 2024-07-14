@@ -14,7 +14,7 @@ import org.bigBrotherBooks.service.BookService;
 
 import java.util.List;
 
-@Path("/resource/book")
+@Path("/book")
 public class BookRestApi {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BookRestApi.class);
