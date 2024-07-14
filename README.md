@@ -8,7 +8,7 @@
 
 [Google Books API]( https://developers.google.com/books/docs/overview)
 
-## Main motive : 
+## Main motive :
 
 TO provide an environment for book lovers to explore and find books of their interest.
 
@@ -18,9 +18,9 @@ They should be able to start a discussion by making groups.
 
 We will be making a renting system for the books.
 
-### Warehouse: 
+### Warehouse:
 
-There will be warehouses which will have the books in different areas. 
+There will be warehouses which will have the books in different areas.
 
 And the user will be able to check if the book is available in the warehouse near them.
 
@@ -28,9 +28,12 @@ They will be provided with renting prices and a deadline to return the book.
 
 There will be a queue for waiting users if book is not available.
 
-
 ### plans for future:
 
 renting system
 
 book pedia
+
+### For adding in the doc:
+
+[Doc Formatting Guide](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)

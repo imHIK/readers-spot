@@ -92,15 +92,25 @@ public class BookService {
         return book.getReviews().stream().map(ReviewService::mapToReviewDTO).toList();
     }
 
-    public Book getDummyBook(){
-        Book book = new Book();
-        book.setName("Dummy Book");
-        book.setDescription("This is a dummy book");
-        return book;
-    }
-
     public static BookDTO mapToBookDTO(Book book) {
-        return new BookDTO(book.getBookId(), book.getName(), book.getDescription(), book.getRating(), book.getGenres());
+        BookDTO bookDTO = new BookDTO();
+        bookDTO.setBookId(book.getBookId());
+        bookDTO.setName(book.getName());
+        bookDTO.setDescription(book.getDescription());
+        bookDTO.setRating(book.getRating());
+        bookDTO.setGenres(book.getGenres());
+        bookDTO.setIsbn10(book.getIsbn10());
+        bookDTO.setIsbn13(book.getIsbn13());
+        bookDTO.setLanguage(book.getLanguage());
+        bookDTO.setType(book.getType());
+        bookDTO.setPrice(book.getPrice());
+        bookDTO.setPages(book.getPages());
+        bookDTO.setPublisher(book.getPublisher());
+        bookDTO.setCoverImage(book.getCoverImage());
+        bookDTO.setYear(book.getYear());
+        bookDTO.setEdition(book.getEdition());
+        return bookDTO;
+
     }
 
     private void mapToBook(BookDTO bookDTO, Book book) {
@@ -108,6 +118,17 @@ public class BookService {
         book.setName(bookDTO.getName());
         book.setGenres(bookDTO.getGenres());
         book.setRating(bookDTO.getRating());
+        book.setLanguage(bookDTO.getLanguage());
+        book.setType(bookDTO.getType());
+        book.setPrice(bookDTO.getPrice());
+        book.setPages(bookDTO.getPages());
+        book.setPublisher(bookDTO.getPublisher());
+        book.setCoverImage(bookDTO.getCoverImage());
+        book.setYear(bookDTO.getYear());
+        book.setEdition(bookDTO.getEdition());
+        book.setIsbn10(bookDTO.getIsbn10());
+        book.setIsbn13(bookDTO.getIsbn13());
+        book.setBookId(bookDTO.getBookId());
 //        book.setAuthor(bookDTO.getAuthor());
 //        book.setFans(bookDTO.getFans());
 //        book.setReviews(bookDTO.getReviews());

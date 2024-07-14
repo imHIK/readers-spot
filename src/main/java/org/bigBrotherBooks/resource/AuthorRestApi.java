@@ -12,7 +12,7 @@ import org.bigBrotherBooks.logger.LoggerFactory;
 import org.bigBrotherBooks.service.AuthorService;
 
 
-@Path("/resource/author")
+@Path("/author")
 public class AuthorRestApi {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthorRestApi.class);

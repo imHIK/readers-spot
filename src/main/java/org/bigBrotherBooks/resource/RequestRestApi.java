@@ -1,5 +1,6 @@
 package org.bigBrotherBooks.resource;
 
+import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -13,6 +14,7 @@ public class RequestRestApi {
 
     private final RequestService requestService;
 
+    @Inject
     public RequestRestApi(RequestService requestService) {
         this.requestService = requestService;
     }
