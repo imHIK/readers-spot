@@ -28,10 +28,12 @@ They will be provided with renting prices and a deadline to return the book.
 
 There will be a queue for waiting users if book is not available.
 
+
 ### plans for future:
 
-renting system
-
+add warehouse
+add renting system
+add user auth (token)
 book pedia
 
 ### For adding in the doc:

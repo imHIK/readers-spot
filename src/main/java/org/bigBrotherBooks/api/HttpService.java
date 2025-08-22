@@ -14,7 +14,7 @@ public class HttpService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpService.class);
     @RestClient
-    HttpClient httpClient;
+    HttpClientV2 httpClient;
 
     public GoogleBooksVolumeInfo getBookById(String isbn, String key) throws Exception {
         String query = "isbn:" + isbn;
