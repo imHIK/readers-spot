@@ -10,9 +10,9 @@ import org.bigBrotherBooks.logger.LoggerFactory;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @Singleton
-public class HttpService {
+public class HttpServiceV2 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HttpService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpServiceV2.class);
     @RestClient
     HttpClientV2 httpClient;
 

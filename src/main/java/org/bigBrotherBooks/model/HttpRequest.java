@@ -64,8 +64,8 @@ public class HttpRequest extends Request {
         return body;
     }
 
-    public void setBody(Map<String, Object> body) {
-        this.body = body.toString();
+    public void setBody(String body) {
+        this.body = body;
     }
 
     @Override

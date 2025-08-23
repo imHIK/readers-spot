@@ -20,7 +20,6 @@ import static org.bigBrotherBooks.constants.GlobalConstants.JWT_VALID_DURATION;
 @Singleton
 public class TokenService {
 
-
     @ConfigProperty(name = "mp.jwt.verify.issuer")
     private String ISSUER;
     @ConfigProperty(name = "smallrye.jwt.sign.key-location")
@@ -43,7 +42,7 @@ public class TokenService {
         }
     }
 
-    private RSAPrivateKey getPrivateKey() throws Exception {
+    private RSAPrivateKey getPrivateKey() {
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(KEY_LOCATION)) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String privateKeyContent = reader.lines().collect(Collectors.joining(System.lineSeparator()));

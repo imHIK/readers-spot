@@ -4,8 +4,11 @@ public class HttpClientBuilder implements ClientBuilder {
 
     private HttpClientConfig config;
 
-    HttpClientBuilder(HttpClientConfig config) {
+    public HttpClientBuilder(HttpClientConfig config) {
         this.config = config;
+    }
+
+    public HttpClientBuilder() {
     }
 
     @Override
