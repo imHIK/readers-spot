@@ -3,6 +3,9 @@ package org.bigBrotherBooks.api;
 
 import org.bigBrotherBooks.infra.utils.HttpUtils;
 import org.bigBrotherBooks.infra.utils.JsonUtils;
+import org.bigBrotherBooks.logger.LogType;
+import org.bigBrotherBooks.logger.Logger;
+import org.bigBrotherBooks.logger.LoggerFactory;
 import org.bigBrotherBooks.model.HttpRequest;
 import org.bigBrotherBooks.model.HttpResponse;
 import org.bigBrotherBooks.model.Request;
@@ -17,6 +20,7 @@ public class HttpClient implements Client {
 
     private final java.net.http.HttpClient httpClient;
     private final HttpClientConfig config;
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpClient.class);
 
     public HttpClient(HttpClientConfig config) {
         this.config = config;
@@ -27,6 +31,7 @@ public class HttpClient implements Client {
 
     @Override
     public <T> Response<T> send(Request request) {
+        LOGGER.log(LogType.ERROR, "Sending request: {}", () -> JsonUtils.toJson(request));
         Exception lastException = null;
 
         for (int attempt = 0; attempt <= config.getMaxRetries(); attempt++) {

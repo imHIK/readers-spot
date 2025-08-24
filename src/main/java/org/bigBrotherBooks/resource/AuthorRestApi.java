@@ -34,7 +34,7 @@ public class AuthorRestApi {
     @Path("/save")
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveAuthor(@Valid AuthorDTO authorDTO) {
-        LOGGER.logThis(LogType.INFO, "Save Author: {}", () -> authorDTO);
+        LOGGER.log(LogType.INFO, "Save Author: {}", () -> authorDTO);
         authorService.saveAuthor(authorDTO);
         return Response.ok("Author " + authorDTO.getName() + " saved Successfully").build();
     }
@@ -51,7 +51,7 @@ public class AuthorRestApi {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteAuthor(@PathParam("id") int authorId) {
-        LOGGER.logThis(LogType.INFO, "Delete Author: {}", authorId);
+        LOGGER.log(LogType.INFO, "Delete Author: {}", authorId);
         if (authorService.deleteAuthor(authorId))
             return Response.ok("Author " + authorId + " Deleted Successfully").build();
         return Response.status(Response.Status.NOT_FOUND).entity("Author not found").build();
@@ -61,7 +61,7 @@ public class AuthorRestApi {
     @Path("/update")                                    // take id explicitly or not
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateAuthor(@Valid AuthorDTO authorDTO) {
-        LOGGER.logThis(LogType.INFO, "Update Author: {}", authorDTO.getAuthorId());
+        LOGGER.log(LogType.INFO, "Update Author: {}", authorDTO.getAuthorId());
         if (authorService.updateAuthor(authorDTO)) {
             return Response.ok("Author " + authorDTO.getAuthorId() + " Updated Successfully").build();
         }
@@ -79,7 +79,7 @@ public class AuthorRestApi {
     @Path("/publish/{author_id}/{book_id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response publishBook(@PathParam("author_id") int authorId, @PathParam("book_id") int bookId) {
-        LOGGER.logThis(LogType.INFO, "Publish Book: {} by Author: {}", bookId, authorId);
+        LOGGER.log(LogType.INFO, "Publish Book: {} by Author: {}", bookId, authorId);
         switch (authorService.publishBook(authorId, bookId)) {
             case 1:
                 return Response.ok("Book " + bookId + " published by Author " + authorId).build();

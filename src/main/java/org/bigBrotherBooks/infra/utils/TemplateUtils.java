@@ -26,9 +26,11 @@ public class TemplateUtils {
             return template;
         }
         Matcher matcher = Pattern.compile(TEMPLATE_PATTERN).matcher(template);
-        String path = matcher.group(1);
-        return getValueFromPath(path, inputs);
-
+        if (matcher.matches()) {
+            String path = matcher.group(1);
+            return getValueFromPath(path, inputs);
+        }
+        return template;
     }
 
     public static Map<String, Object> resolveTemplate(Map<String, Object> map, Map<String, Object> inputs) {

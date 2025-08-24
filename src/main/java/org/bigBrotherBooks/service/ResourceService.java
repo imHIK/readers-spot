@@ -7,6 +7,9 @@ import org.bigBrotherBooks.infra.utils.CollectionUtils;
 import org.bigBrotherBooks.infra.utils.JsonUtils;
 import org.bigBrotherBooks.infra.utils.StringUtils;
 import org.bigBrotherBooks.infra.utils.TemplateUtils;
+import org.bigBrotherBooks.logger.LogType;
+import org.bigBrotherBooks.logger.Logger;
+import org.bigBrotherBooks.logger.LoggerFactory;
 import org.bigBrotherBooks.model.HttpRequest;
 import org.bigBrotherBooks.model.ResourceConfig;
 import org.bigBrotherBooks.model.Response;
@@ -26,18 +29,22 @@ public class ResourceService {
 
     private final Map<String, HttpClient> httpClientCache = new ConcurrentHashMap<>();
     private final Map<String, ResourceConfig> resourceConfigCache = new ConcurrentHashMap<>();
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceService.class);
 
 
     public Object getResource(String resourceType, String resourceId, Map<String, Object> inputs) {
         try {
+            LOGGER.log(LogType.ERROR, "inputs : {} ", () -> JsonUtils.toJson(inputs));
             ResourceConfig resourceConfig = getResourceConfig(resourceType, resourceId);
             resolveInputs(resourceConfig, inputs);
             HttpClient client = getHttpClient(resourceType, resourceId);
             Response<Object> response = client.send(resourceConfig.getHttpRequest());
+            LOGGER.log(LogType.ERROR, "response : {} ", () -> JsonUtils.toJson(response));
             // adapt response based on resourceType if needed
             return response.getResponse();
 
         } catch (Exception e) {
+            LOGGER.log(LogType.ERROR, "Failed to get resource", e);
             throw new RuntimeException("Failed to get resource", e);
         }
 

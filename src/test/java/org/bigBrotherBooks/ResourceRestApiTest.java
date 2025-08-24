@@ -8,6 +8,6 @@ class ResourceRestApiTest {
 
     @Test
     void testTemp() {
-
+        System.out.println("temp test");
     }
 }

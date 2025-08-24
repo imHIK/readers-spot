@@ -14,17 +14,17 @@ public class LoggerImpl implements Logger {
     }
 
     @Override
-    public void logThis(LogType logType, String message) {
+    public void log(LogType logType, String message) {
         logger.atLevel(logType.getLevel()).setMessage(message).log();
     }
 
     @Override
-    public void logThis(LogType logType, Supplier<String> msgSupplier) {
+    public void log(LogType logType, Supplier<String> msgSupplier) {
         logger.atLevel(logType.getLevel()).setMessage(msgSupplier).log();
     }
 
     @Override
-    public void logThis(LogType logType, String message, Object... args) {
+    public void log(LogType logType, String message, Object... args) {
         LoggingEventBuilder loggingEventBuilder = logger.atLevel(logType.getLevel()).setMessage(message);
         for (Object arg : args) {
             loggingEventBuilder = loggingEventBuilder.addArgument(arg);
@@ -33,7 +33,7 @@ public class LoggerImpl implements Logger {
     }
 
     @Override
-    public void logThis(LogType logType, Supplier<String> msgSupplier, Object... args) {
+    public void log(LogType logType, Supplier<String> msgSupplier, Object... args) {
         LoggingEventBuilder loggingEventBuilder = logger.atLevel(logType.getLevel()).setMessage(msgSupplier);
         for (Object arg : args) {
             loggingEventBuilder = loggingEventBuilder.addArgument(arg);
@@ -42,7 +42,7 @@ public class LoggerImpl implements Logger {
     }
 
     @Override
-    public void logThis(LogType logType, String message, Supplier<Object>... argSuppliers) {
+    public void log(LogType logType, String message, Supplier<Object>... argSuppliers) {
         LoggingEventBuilder loggingEventBuilder = logger.atLevel(logType.getLevel()).setMessage(message);
         for (Supplier<Object> argSupplier : argSuppliers) {
             loggingEventBuilder = loggingEventBuilder.addArgument(argSupplier);
@@ -51,7 +51,7 @@ public class LoggerImpl implements Logger {
     }
 
     @Override
-    public void logThis(LogType logType, Supplier<String> msgSupplier, Supplier<Object>... argSuppliers) {
+    public void log(LogType logType, Supplier<String> msgSupplier, Supplier<Object>... argSuppliers) {
         LoggingEventBuilder loggingEventBuilder = logger.atLevel(logType.getLevel()).setMessage(msgSupplier);
         for (Supplier<Object> argSupplier : argSuppliers) {
             loggingEventBuilder = loggingEventBuilder.addArgument(argSupplier);

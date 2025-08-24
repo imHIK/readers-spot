@@ -1,10 +1,7 @@
 package org.bigBrotherBooks.resource;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.bigBrotherBooks.service.ResourceService;
@@ -22,7 +19,8 @@ public class ResourceRestApi {
     }
 
     @POST
-    @Path("/get/{resourceType}/{resourceId}")
+    @Path("/{resourceType}/{resourceId}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getResource(@PathParam("resourceType") String resourceType,
                                 @PathParam("resourceId") String resourceId,
@@ -30,7 +28,7 @@ public class ResourceRestApi {
         try {
             return Response.ok(resourceService.getResource(resourceType, resourceId, inputs)).build();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error fetching resource: " + e.getMessage()).build();
         }
     }
 

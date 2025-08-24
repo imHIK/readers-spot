@@ -9,7 +9,10 @@ public class HttpClientConfig {
     private int maxRetries = 3;
     private Duration retryDelay = Duration.ofSeconds(1);
     private double backoffFactor = 2.0;
-    private Map<String, String> defaultHeaders;
+    private Map<String, String> defaultHeaders = Map.of(
+            "Accept", "application/json",
+            "Content-Type", "application/json"
+    );
     private String userAgent = "ReaderProject-HttpClient/1.0";
 
     public Duration getConnectTimeout() {

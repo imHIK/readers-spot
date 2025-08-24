@@ -9,9 +9,12 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.bigBrotherBooks.dto.UserDTO;
 import org.bigBrotherBooks.model.LoginRequest;
 import org.bigBrotherBooks.service.AuthService;
 import org.bigBrotherBooks.service.UserService;
+
+import java.util.Set;
 
 @Path("/auth")
 public class AuthResource {
@@ -41,8 +44,9 @@ public class AuthResource {
     @Path("/register")
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(@Valid LoginRequest loginRequest) {
-        // to be added in future
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        // remove in future
+        userService.saveUser(generateNewUser(loginRequest));
+        return Response.status(Response.Status.CREATED).entity("User " + loginRequest.getUserName() + " registered successfully").build();
     }
 
     @POST
@@ -51,5 +55,14 @@ public class AuthResource {
     public Response refresh(@Valid LoginRequest loginRequest) {
         // to be added in future
         return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    }
+
+    UserDTO generateNewUser(LoginRequest loginRequest) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserName(loginRequest.getUserName());
+        userDTO.setPassword(loginRequest.getPassword());
+        userDTO.setDeleted(false);
+        userDTO.setRoles(Set.of("USER"));
+        return userDTO;
     }
 }
