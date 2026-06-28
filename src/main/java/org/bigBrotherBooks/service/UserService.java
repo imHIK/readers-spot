@@ -11,6 +11,7 @@ import org.bigBrotherBooks.model.User;
 import org.bigBrotherBooks.repository.UserRepository;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.bigBrotherBooks.service.AuthService.encryptPassword;
 
@@ -181,18 +182,35 @@ public class UserService {
     }
 
     public static UserDTO mapToUserDTO(User user) {
-        return new UserDTO(user.getUserName(), user.getPassword(), user.getName(), user.getEmail(), user.getPhone(), user.getAddress(), user.getRoles(), user.isDeleted());
+        if (user == null) {
+            return null;
+        }
+        UserDTO dto = new UserDTO(user.getUserName(), null, user.getName(), user.getEmail(), user.getPhone(), user.getAddress(), user.getRoles(), user.isDeleted());
+        return dto;
     }
 
     private void mapToUser(UserDTO userDTO, User user) {
         user.setUserName(userDTO.getUserName());
         user.setName(userDTO.getName());
-        user.setPassword(encryptPassword(userDTO.getPassword()));
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isBlank() && !isBcryptHash(userDTO.getPassword())) {
+            user.setPassword(encryptPassword(userDTO.getPassword()));
+        }
         user.setEmail(userDTO.getEmail());
         user.setPhone(userDTO.getPhone());
         user.setAddress(userDTO.getAddress());
-        user.setRoles(userDTO.getRoles());
+        user.setRoles(sanitizeRoles(userDTO.getRoles()));
         user.setDeleted(userDTO.isDeleted());
+    }
+
+    private static Set<String> sanitizeRoles(Set<String> roles) {
+        if (roles == null || roles.isEmpty()) {
+            return Set.of("USER");
+        }
+        return Set.of("USER");
+    }
+
+    private static boolean isBcryptHash(String value) {
+        return value.startsWith("$2a$") || value.startsWith("$2b$") || value.startsWith("$2y$");
     }
 
 }

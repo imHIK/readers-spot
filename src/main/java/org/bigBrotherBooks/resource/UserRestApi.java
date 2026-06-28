@@ -39,7 +39,7 @@ public class UserRestApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(@PathParam("user_name") String userName) {
         UserDTO user = userService.getUserDTO(userName);
-if(user == null) {
+        if (user == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("User " + userName + " not found").build();
         }
 
@@ -109,9 +109,10 @@ if(user == null) {
     @Produces(MediaType.APPLICATION_JSON)
     public Response unfollowUser(@PathParam("user_name") String toUserName, @QueryParam("from") String fromUserName) {
         LOGGER.log(LogType.INFO, "User: {} unfollow User: {}", fromUserName, toUserName);
-        if (userService.followUser(fromUserName, toUserName, false))
+        if (userService.followUser(fromUserName, toUserName, false)) {
             return Response.ok("User " + fromUserName + " has unfollowed " + toUserName).build();
-        return Response.ok("User " + fromUserName + " has unfollowed " + toUserName).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).entity("User or followed user not found").build();
     }
 
     @POST

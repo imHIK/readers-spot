@@ -1,8 +1,10 @@
 package org.bigBrotherBooks.service;
 
-import io.netty.util.internal.StringUtil;
 import io.smallrye.jwt.build.Jwt;
 import jakarta.inject.Singleton;
+import org.bigBrotherBooks.logger.LogType;
+import org.bigBrotherBooks.logger.Logger;
+import org.bigBrotherBooks.logger.LoggerFactory;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.io.BufferedReader;
@@ -20,6 +22,8 @@ import static org.bigBrotherBooks.constants.GlobalConstants.JWT_VALID_DURATION;
 @Singleton
 public class TokenService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TokenService.class);
+
     @ConfigProperty(name = "mp.jwt.verify.issuer")
     private String ISSUER;
     @ConfigProperty(name = "smallrye.jwt.sign.key-location")
@@ -36,8 +40,7 @@ public class TokenService {
                     .expiresAt(System.currentTimeMillis() / 1000 + JWT_VALID_DURATION)
                     .sign(privateKey);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("____TOKEN NOT GENERATED____");  // only for debugging
+            LOGGER.log(LogType.ERROR, "Failed to generate JWT: {}", e.getMessage());
             return null;
         }
     }
@@ -48,17 +51,16 @@ public class TokenService {
             String privateKeyContent = reader.lines().collect(Collectors.joining(System.lineSeparator()));
 
             String privateKeyPEM = privateKeyContent
-                    .replace("-----BEGIN PRIVATE KEY-----", StringUtil.EMPTY_STRING)
-                    .replaceAll(System.lineSeparator(), StringUtil.EMPTY_STRING)
-                    .replace("-----END PRIVATE KEY-----", StringUtil.EMPTY_STRING);
+                    .replace("-----BEGIN PRIVATE KEY-----", "")
+                    .replaceAll(System.lineSeparator(), "")
+                    .replace("-----END PRIVATE KEY-----", "");
 
             byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyPEM);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
             return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("____PRIVATE KEY NOT LOADED____");
+            LOGGER.log(LogType.ERROR, "Failed to load JWT signing key from {}: {}", KEY_LOCATION, e.getMessage());
             return null;
         }
     }

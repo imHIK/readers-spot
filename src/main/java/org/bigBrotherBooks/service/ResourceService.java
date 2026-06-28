@@ -14,15 +14,11 @@ import org.bigBrotherBooks.model.HttpRequest;
 import org.bigBrotherBooks.model.ResourceConfig;
 import org.bigBrotherBooks.model.Response;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static org.bigBrotherBooks.constants.GlobalConstants.CONFIGS_BASE_PATH;
+import static org.bigBrotherBooks.constants.GlobalConstants.CONFIGS_CLASSPATH_PREFIX;
 
 @Singleton
 public class ResourceService {
@@ -34,12 +30,12 @@ public class ResourceService {
 
     public Object getResource(String resourceType, String resourceId, Map<String, Object> inputs) {
         try {
-            LOGGER.log(LogType.ERROR, "inputs : {} ", () -> JsonUtils.toJson(inputs));
-            ResourceConfig resourceConfig = getResourceConfig(resourceType, resourceId);
+            LOGGER.log(LogType.INFO, "Fetching resource {}:{} with inputs {}", resourceType, resourceId, () -> JsonUtils.toJson(inputs));
+            ResourceConfig resourceConfig = JsonUtils.deepCopy(getResourceConfig(resourceType, resourceId));
             resolveInputs(resourceConfig, inputs);
             HttpClient client = getHttpClient(resourceType, resourceId);
             Response<Object> response = client.send(resourceConfig.getHttpRequest());
-            LOGGER.log(LogType.ERROR, "response : {} ", () -> JsonUtils.toJson(response));
+            LOGGER.log(LogType.INFO, "Resource {}:{} response status {}", resourceType, resourceId, response::getStatus);
             // adapt response based on resourceType if needed
             return response.getResponse();
 
@@ -72,15 +68,14 @@ public class ResourceService {
     }
 
     private ResourceConfig loadResourceConfig(String resourceType, String resourceId) throws Exception {
-        Path configPath = Paths.get(CONFIGS_BASE_PATH, resourceType, resourceId + ".json");
-        if (!Files.exists(configPath)) {
-            throw new FileNotFoundException("Resource config not found: " + configPath);
-        }
-        // Load and parse JSON configuration
-        try (InputStream inputStream = Files.newInputStream(configPath)) {
+        String resourcePath = CONFIGS_CLASSPATH_PREFIX + "/" + resourceType + "/" + resourceId + ".json";
+        try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath)) {
+            if (inputStream == null) {
+                throw new IllegalArgumentException("Resource config not found on classpath: " + resourcePath);
+            }
             return JsonUtils.fromJson(inputStream, ResourceConfig.class);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to parse resource config: " + configPath, e);
+            throw new RuntimeException("Failed to parse resource config: " + resourcePath, e);
         }
     }
 

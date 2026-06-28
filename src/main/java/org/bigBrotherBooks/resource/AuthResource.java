@@ -1,6 +1,6 @@
 package org.bigBrotherBooks.resource;
 
-import com.mysql.cj.util.StringUtils;
+import org.bigBrotherBooks.infra.utils.StringUtils;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.POST;
@@ -33,7 +33,7 @@ public class AuthResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(@Valid LoginRequest loginRequest) {
         String token = authService.authenticate(loginRequest);
-        if (!StringUtils.isNullOrEmpty(token)) {
+        if (!StringUtils.isEmpty(token)) {
             return Response.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + token).build();
         } else {
             return Response.status(Response.Status.UNAUTHORIZED).build();

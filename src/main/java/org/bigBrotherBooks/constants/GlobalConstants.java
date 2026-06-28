@@ -9,7 +9,8 @@ public class GlobalConstants {
     public static final long RENT_REQUEST_LOCK_TIME = TimeUnit.MINUTES.toMillis(30);
     public static final long RENT_DEADLINE = TimeUnit.DAYS.toMillis(15);
 
-    public static final String BOOKS_API_BASE_URL = "https://books.googleapis.com/books/v1";
+    public static final String BOOKS_API_BASE_URL = "https://www.googleapis.com/books/v1";
 
-    public static final String CONFIGS_BASE_PATH = "/Users/harshilkapasi/Documents/readers-spot/src/main/java/org/bigBrotherBooks/configs";
+    /** Classpath prefix for external API config JSON (under src/main/resources/configs/). */
+    public static final String CONFIGS_CLASSPATH_PREFIX = "configs";
 }

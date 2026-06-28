@@ -95,7 +95,6 @@ public class UserDTO {
     public String toString() {
         return "UserDTO{" +
                 "userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +

@@ -11,7 +11,7 @@ import org.bigBrotherBooks.api.HttpServiceV2;
 import org.bigBrotherBooks.configModels.GoogleBooksVolumeInfo;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-@Path("/resource")
+@Path("/catalog")
 public class ResourceRestApiV2 {
 
     private final HttpServiceV2 httpService;
@@ -31,7 +31,9 @@ public class ResourceRestApiV2 {
             GoogleBooksVolumeInfo booksInfo = httpService.getBookById(isbn, key);
             return Response.ok(booksInfo).build();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return Response.status(Response.Status.BAD_GATEWAY)
+                    .entity("Failed to fetch book metadata: " + e.getMessage())
+                    .build();
         }
     }
 

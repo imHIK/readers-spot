@@ -7,6 +7,7 @@ import org.bigBrotherBooks.configModels.BookCondition;
 import org.bigBrotherBooks.configModels.Status;
 import org.bigBrotherBooks.dto.RentRequestDTO;
 import org.bigBrotherBooks.dto.StockDTO;
+import org.bigBrotherBooks.model.Book;
 import org.bigBrotherBooks.model.RentRequest;
 import org.bigBrotherBooks.model.User;
 import org.bigBrotherBooks.model.Warehouse;
@@ -20,12 +21,14 @@ public class RequestService {
     private final RentRequestRepository rentRequestRepository;
     private final UserService userService;
     private final WarehouseService warehouseService;
+    private final BookService bookService;
 
     @Inject
-    public RequestService(RentRequestRepository rentRequestRepository, UserService userService, WarehouseService warehouseService) {
+    public RequestService(RentRequestRepository rentRequestRepository, UserService userService, WarehouseService warehouseService, BookService bookService) {
         this.rentRequestRepository = rentRequestRepository;
         this.userService = userService;
         this.warehouseService = warehouseService;
+        this.bookService = bookService;
     }
 
     public RentRequest getRentRequestById(int requestId) {
@@ -37,16 +40,20 @@ public class RequestService {
         return mapToRentRequestDTO(rentRequest);
     }
 
+    @Transactional
     public boolean makeRequest(String userName, RentRequestDTO rentRequestDTO) {
         RentRequest rentRequest = new RentRequest();
         mapToRentRequest(rentRequestDTO, rentRequest);
         User user = userService.getUserById(userName);
-        if (user == null) {
+        Book book = bookService.getBookById(rentRequestDTO.getBookId());
+        Warehouse warehouse = warehouseService.getWarehouseById(rentRequestDTO.getWarehouseId());
+        if (user == null || book == null || warehouse == null) {
             return false;
         }
-        Warehouse warehouse = warehouseService.getWarehouseById(rentRequestDTO.getWarehouseId());
-        if (warehouse == null) {
-            return false;
+        rentRequest.setBook(book);
+        rentRequest.setWarehouse(warehouse);
+        if (rentRequest.getRequestTime() == null) {
+            rentRequest.setRequestTime(System.currentTimeMillis());
         }
         user.addRentRequest(rentRequest);
         warehouse.addRentRequest(rentRequest);
