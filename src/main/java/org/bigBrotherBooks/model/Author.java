@@ -40,6 +40,7 @@ public class Author {
 
     public Author() {
         books = new HashSet<>();
+        fans = new HashSet<>();
     }
 
     public int getAuthorId() {

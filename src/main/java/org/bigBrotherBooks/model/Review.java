@@ -38,6 +38,7 @@ public class Review {
     private String text;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private Star rating;
 
     @Column

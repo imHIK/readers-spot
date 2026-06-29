@@ -44,7 +44,12 @@ public class AuthResource {
     @Path("/register")
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(@Valid LoginRequest loginRequest) {
-        // remove in future
+        if (StringUtils.isEmpty(loginRequest.getUserName()) || StringUtils.isEmpty(loginRequest.getPassword())) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Username and password are required").build();
+        }
+        if (userService.getUserById(loginRequest.getUserName()) != null) {
+            return Response.status(Response.Status.CONFLICT).entity("User " + loginRequest.getUserName() + " already exists").build();
+        }
         userService.saveUser(generateNewUser(loginRequest));
         return Response.status(Response.Status.CREATED).entity("User " + loginRequest.getUserName() + " registered successfully").build();
     }

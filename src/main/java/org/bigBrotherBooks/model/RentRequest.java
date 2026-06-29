@@ -24,6 +24,7 @@ public class RentRequest {
     private Warehouse warehouse;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Column

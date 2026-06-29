@@ -30,12 +30,12 @@ public class ResourceService {
 
     public Object getResource(String resourceType, String resourceId, Map<String, Object> inputs) {
         try {
-            LOGGER.log(LogType.INFO, "Fetching resource {}:{} with inputs {}", resourceType, resourceId, () -> JsonUtils.toJson(inputs));
+            LOGGER.log(LogType.INFO, "Fetching resource {}:{} with inputs {}", resourceType, resourceId, JsonUtils.toJson(inputs));
             ResourceConfig resourceConfig = JsonUtils.deepCopy(getResourceConfig(resourceType, resourceId));
             resolveInputs(resourceConfig, inputs);
             HttpClient client = getHttpClient(resourceType, resourceId);
             Response<Object> response = client.send(resourceConfig.getHttpRequest());
-            LOGGER.log(LogType.INFO, "Resource {}:{} response status {}", resourceType, resourceId, response::getStatus);
+            LOGGER.log(LogType.INFO, "Resource {}:{} response status {}", resourceType, resourceId, response.getStatus());
             // adapt response based on resourceType if needed
             return response.getResponse();
 

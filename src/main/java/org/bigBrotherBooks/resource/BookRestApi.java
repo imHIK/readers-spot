@@ -46,6 +46,9 @@ public class BookRestApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBook(@PathParam("id") int bookId) {
         BookDTO bookDTO = bookService.getBookDTO(bookId);
+        if (bookDTO == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Book " + bookId + " not found").build();
+        }
         return Response.ok(bookDTO).build();
     }
 
@@ -93,6 +96,9 @@ public class BookRestApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBookReviews(@PathParam("book_id") int bookId) {
         List<ReviewDTO> reviews = bookService.getReviews(bookId);
+        if (reviews == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Book " + bookId + " not found").build();
+        }
         return Response.ok(reviews).build();
     }
 

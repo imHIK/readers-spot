@@ -44,6 +44,9 @@ public class AuthorRestApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAuthor(@PathParam("id") int authorId) {
         AuthorDTO authorDTO = authorService.getAuthorDTO(authorId);
+        if (authorDTO == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Author " + authorId + " not found").build();
+        }
         return Response.ok(authorDTO).build();
     }
 

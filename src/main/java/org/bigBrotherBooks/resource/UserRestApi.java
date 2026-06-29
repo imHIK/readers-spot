@@ -198,6 +198,9 @@ public class UserRestApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getReviews(@PathParam("user_name") String userName) {
         List<ReviewDTO> reviews = userService.getReviews(userName);
+        if (reviews == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("User " + userName + " not found").build();
+        }
         return Response.ok(reviews).build();
     }
 

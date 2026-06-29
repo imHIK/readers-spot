@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter, Containe
 
         try {
             JsonWebToken jsonWebToken = jwtParser.parse(token);
-            if (!jsonWebToken.getIssuer().equals(GlobalConstants.JWT_ISSUER)) {
+            if (!GlobalConstants.JWT_ISSUER.equals(jsonWebToken.getIssuer())) {
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity("Invalid token").build());
                 return;
             }
@@ -54,7 +54,8 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter, Containe
 
             UserContext userContext = new UserContext();
             userContext.setUsername(jsonWebToken.getSubject());
-            userContext.setRoles(jsonWebToken.getGroups().stream().toList());
+            java.util.Set<String> groups = jsonWebToken.getGroups();
+            userContext.setRoles(groups == null ? java.util.List.of() : new java.util.ArrayList<>(groups));
             userContextProvider.setUserContext(userContext);
 
         } catch (ParseException e) {

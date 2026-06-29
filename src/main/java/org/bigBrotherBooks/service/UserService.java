@@ -110,13 +110,16 @@ public class UserService {
     @Transactional
     public boolean modifyFavoriteBook(String userName, int bookId, boolean isAdded) {
         User user = getUserById(userName);
+        if (user == null) {
+            return false;
+        }
         Book book;
         if (isAdded) {
             book = bookService.getBookById(bookId);
         } else {
             book = user.getFavoriteBooks().stream().filter(b -> b.getBookId() == bookId).findFirst().orElse(null);
         }
-        if (user == null || book == null) {
+        if (book == null) {
             return false;
         }
         if (isAdded) user.addFavoriteBook(book);       // also adds user in book-fans
@@ -127,14 +130,16 @@ public class UserService {
     @Transactional
     public boolean modifyFavoriteAuthor(String userName, int authorId, boolean isAdded) {
         User user = getUserById(userName);
+        if (user == null) {
+            return false;
+        }
         Author author;
         if (isAdded) {
             author = authorService.getAuthor(authorId);
         } else {
             author = user.getFavoriteAuthors().stream().filter(a -> a.getAuthorId() == authorId).findFirst().orElse(null);
         }
-
-        if (user == null || author == null) {
+        if (author == null) {
             return false;
         }
         if (isAdded) user.addFavoriteAuthor(author);  // also adds user in author-fans
@@ -145,19 +150,28 @@ public class UserService {
     @Transactional
     public List<ReviewDTO> getReviews(String userName) {
         User user = getUserById(userName);
+        if (user == null) {
+            return null;
+        }
         return user.getReviews().stream().map(ReviewService::mapToReviewDTO).toList();
     }
 
     @Transactional
     public boolean followUser(String userName, String followingUserName, boolean isStarting) {
+        if (userName == null || userName.equals(followingUserName)) {
+            return false;   // a user cannot follow themselves
+        }
         User user = getUserById(userName);
+        if (user == null) {
+            return false;
+        }
         User followingUser;
         if (isStarting) {
             followingUser = getUserById(followingUserName);
         } else {
             followingUser = user.getFollowing().stream().filter(u -> u.getUserName().equals(followingUserName)).findFirst().orElse(null);
         }
-        if (user == null || followingUser == null) {
+        if (followingUser == null) {
             return false;
         }
         if (isStarting) user.addFollowing(followingUser);       // also adds user in following-followers
@@ -202,11 +216,21 @@ public class UserService {
         user.setDeleted(userDTO.isDeleted());
     }
 
+    private static final Set<String> ALLOWED_ROLES = Set.of("USER", "ADMIN");
+
     private static Set<String> sanitizeRoles(Set<String> roles) {
         if (roles == null || roles.isEmpty()) {
             return Set.of("USER");
         }
-        return Set.of("USER");
+        Set<String> sanitized = roles.stream()
+                .filter(java.util.Objects::nonNull)
+                .map(role -> role.trim().toUpperCase())
+                .filter(ALLOWED_ROLES::contains)
+                .collect(java.util.stream.Collectors.toCollection(java.util.HashSet::new));
+        if (sanitized.isEmpty()) {
+            sanitized.add("USER");
+        }
+        return sanitized;
     }
 
     private static boolean isBcryptHash(String value) {
