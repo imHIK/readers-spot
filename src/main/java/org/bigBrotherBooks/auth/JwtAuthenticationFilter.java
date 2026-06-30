@@ -21,10 +21,6 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter, Containe
 
     private final JWTParser jwtParser;
     private final UserContext.Provider userContextProvider;
-    private static final String LOGIN_PATH = "/auth/login";
-    private static final String REGISTER_PATH = "/auth/register";
-    private static final String REFRESH_PATH = "/auth/refresh";
-
     @Inject
     public JwtAuthenticationFilter(JWTParser jwtParser, UserContext.Provider userContextProvider) {
         this.jwtParser = jwtParser;
@@ -34,7 +30,7 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter, Containe
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String uriPath = requestContext.getUriInfo().getPath();
-        if (uriPath.contains(LOGIN_PATH) || uriPath.contains(REGISTER_PATH) || uriPath.contains(REFRESH_PATH)) {
+        if (AuthPathMatcher.isPublicAuthPath(uriPath)) {
             return;
         }
 
@@ -47,7 +43,7 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter, Containe
 
         try {
             JsonWebToken jsonWebToken = jwtParser.parse(token);
-            if (!jsonWebToken.getIssuer().equals(GlobalConstants.JWT_ISSUER)) {
+            if (!GlobalConstants.JWT_ISSUER.equals(jsonWebToken.getIssuer())) {
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity("Invalid token").build());
                 return;
             }
@@ -58,7 +54,8 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter, Containe
 
             UserContext userContext = new UserContext();
             userContext.setUsername(jsonWebToken.getSubject());
-            userContext.setRoles(jsonWebToken.getGroups().stream().toList());
+            java.util.Set<String> groups = jsonWebToken.getGroups();
+            userContext.setRoles(groups == null ? java.util.List.of() : new java.util.ArrayList<>(groups));
             userContextProvider.setUserContext(userContext);
 
         } catch (ParseException e) {
@@ -70,4 +67,5 @@ public class JwtAuthenticationFilter implements ContainerRequestFilter, Containe
     public void filter(ContainerRequestContext containerRequestContext, ContainerResponseContext containerResponseContext) throws IOException {
         userContextProvider.setUserContext(null);
     }
+
 }

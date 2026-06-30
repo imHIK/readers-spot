@@ -1,40 +1,36 @@
 package org.bigBrotherBooks.resource;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.bigBrotherBooks.api.HttpService;
-import org.bigBrotherBooks.configModels.GoogleBooksVolumeInfo;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.bigBrotherBooks.service.ResourceService;
+
+import java.util.Map;
 
 @Path("/resource")
 public class ResourceRestApi {
 
-    private final HttpService httpService;
-    @ConfigProperty(name = "google-cloud-api-key")
-    private String key;
+    private final ResourceService resourceService;
 
     @Inject
-    public ResourceRestApi(HttpService httpService) {
-        this.httpService = httpService;
+    public ResourceRestApi(ResourceService resourceService) {
+        this.resourceService = resourceService;
     }
 
-    @GET
-    @Path("/book/{isbn}")
+    @POST
+    @Path("/{resourceType}/{resourceId}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBook(@PathParam("isbn") String isbn) {
+    public Response getResource(@PathParam("resourceType") String resourceType,
+                                @PathParam("resourceId") String resourceId,
+                                Map<String, Object> inputs) {
         try {
-            GoogleBooksVolumeInfo booksInfo = httpService.getBookById(isbn, key);
-            return Response.ok(booksInfo).build();
+            return Response.ok(resourceService.getResource(resourceType, resourceId, inputs)).build();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error fetching resource: " + e.getMessage()).build();
         }
     }
-
 
 
 }

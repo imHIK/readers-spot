@@ -41,5 +41,6 @@ nb-configuration.xml
 #private key
 *.pem
 
-# config
+# config (use application.properties.example as template)
 application.properties
+!application.properties.example

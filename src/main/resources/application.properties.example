@@ -1,0 +1,18 @@
+# Copy to src/main/resources/application.properties (gitignored) and fill in values.
+
+# Database
+quarkus.datasource.db-kind=mysql
+quarkus.datasource.username=reader
+quarkus.datasource.password=change-me
+quarkus.datasource.jdbc.url=jdbc:mysql://localhost:3306/readers_spot
+
+quarkus.hibernate-orm.database.generation=update
+
+# JWT (generate RSA key pair; keep private key out of git)
+mp.jwt.verify.issuer=readers-spot-app
+smallrye.jwt.sign.key-location=privateKey.pem
+mp.jwt.verify.publickey.location=publicKey.pem
+
+# Google Books
+google-cloud-api-key=your-google-books-api-key
+quarkus.rest-client."org.bigBrotherBooks.api.HttpClientV2".url=https://www.googleapis.com/books/v1

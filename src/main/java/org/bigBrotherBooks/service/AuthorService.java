@@ -105,6 +105,9 @@ public class AuthorService {
     }
 
     public static AuthorDTO mapToAuthorDTO(Author author) {
+        if (author == null) {
+            return null;
+        }
         return new AuthorDTO(author.getAuthorId(), author.getName(), author.getAbout());
     }
 

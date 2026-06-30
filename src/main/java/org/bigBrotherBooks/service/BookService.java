@@ -35,6 +35,9 @@ public class BookService {
 
     public BookDTO getBookDTO(int bookId) {
         Book book = bookRepo.findById((long) bookId);
+        if (book == null) {
+            return null;
+        }
         return mapToBookDTO(book);
     }
 
@@ -89,10 +92,16 @@ public class BookService {
     @Transactional
     public List<ReviewDTO> getReviews(int bookId) {
         Book book = getBookById(bookId);
+        if (book == null) {
+            return null;
+        }
         return book.getReviews().stream().map(ReviewService::mapToReviewDTO).toList();
     }
 
     public static BookDTO mapToBookDTO(Book book) {
+        if (book == null) {
+            return null;
+        }
         BookDTO bookDTO = new BookDTO();
         bookDTO.setBookId(book.getBookId());
         bookDTO.setName(book.getName());

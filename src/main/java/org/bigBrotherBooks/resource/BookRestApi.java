@@ -36,7 +36,7 @@ public class BookRestApi {
     @Path("/save")
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveBook(@Valid BookDTO bookDTO) {
-        LOGGER.logThis(LogType.INFO, "Save Book");
+        LOGGER.log(LogType.INFO, "Save Book");
         bookService.saveBook(bookDTO);
         return Response.status(Response.Status.CREATED).entity("Book " + bookDTO.getName() + " saved Successfully").build();
     }
@@ -46,6 +46,9 @@ public class BookRestApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBook(@PathParam("id") int bookId) {
         BookDTO bookDTO = bookService.getBookDTO(bookId);
+        if (bookDTO == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Book " + bookId + " not found").build();
+        }
         return Response.ok(bookDTO).build();
     }
 
@@ -53,7 +56,7 @@ public class BookRestApi {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteBook(@PathParam("id") int bookId) {
-        LOGGER.logThis(LogType.INFO, "Delete Book");
+        LOGGER.log(LogType.INFO, "Delete Book");
         if (bookService.deleteBook(bookId))
             return Response.ok("Book " + bookId + " Deleted Successfully").build();
         return Response.status(Response.Status.NOT_FOUND).entity("Book not found").build();
@@ -63,7 +66,7 @@ public class BookRestApi {
     @Path("/update")
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateBook(@Valid BookDTO bookDTO) {
-        LOGGER.logThis(LogType.INFO, "Update Book");
+        LOGGER.log(LogType.INFO, "Update Book");
         if (bookService.updateBook(bookDTO)) {
             return Response.ok("Book " + bookDTO.getBookId() + " Updated Successfully").build();
         }
@@ -93,6 +96,9 @@ public class BookRestApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBookReviews(@PathParam("book_id") int bookId) {
         List<ReviewDTO> reviews = bookService.getReviews(bookId);
+        if (reviews == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Book " + bookId + " not found").build();
+        }
         return Response.ok(reviews).build();
     }
 

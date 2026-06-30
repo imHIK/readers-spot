@@ -3,6 +3,8 @@ package org.bigBrotherBooks.service;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import org.bigBrotherBooks.infra.utils.CollectionUtils;
+import org.bigBrotherBooks.infra.utils.StringUtils;
 import org.bigBrotherBooks.model.LoginRequest;
 import org.bigBrotherBooks.model.User;
 
@@ -19,8 +21,14 @@ public class AuthService {
     }
 
     public String authenticate(LoginRequest loginRequest) {
+        if (StringUtils.isEmpty(loginRequest.getUserName()) || StringUtils.isEmpty(loginRequest.getPassword())) {
+            return null;
+        }
         User user = userService.getUserById(loginRequest.getUserName());
         if (user == null || !checkPassword(loginRequest.getPassword(), user.getPassword())) {
+            return null;
+        }
+        if (CollectionUtils.isEmpty(user.getRoles())) {
             return null;
         }
         return tokenService.generateToken(user.getUserName(), user.getRoles());

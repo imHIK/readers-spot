@@ -26,7 +26,7 @@ public class ReviewRestApi {
     @Path("/{user_name}/{book_id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response addReview(@PathParam("user_name") String userName, @PathParam("book_id") int bookId, @Valid ReviewDTO reviewDTO) {
-        LOGGER.logThis(LogType.INFO, "User: {} Added Review for Book: {}", userName, bookId);
+        LOGGER.log(LogType.INFO, "User: {} Added Review for Book: {}", userName, bookId);
         if (reviewService.addReview(userName, bookId, reviewDTO))
             return Response.ok("Review added by " + userName + " for Book " + bookId).build();
         return Response.status(Response.Status.NOT_FOUND).entity("User or Book not found").build();
@@ -36,7 +36,7 @@ public class ReviewRestApi {
     @Path("/{user_name}/{book_id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeReview(@PathParam("user_name") String userName, @PathParam("book_id") int bookId) {
-        LOGGER.logThis(LogType.INFO, "User: {} Added Review for Book: {}", userName, bookId);
+        LOGGER.log(LogType.INFO, "User: {} Added Review for Book: {}", userName, bookId);
         if (reviewService.removeReview(userName, bookId))
             return Response.ok("Review of book " + bookId + " removed by " + userName).build();
         return Response.status(Response.Status.NOT_FOUND).entity("Review not found").build();
@@ -46,7 +46,7 @@ public class ReviewRestApi {
     @Path("/{user_name}/{book_id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateReview(@PathParam("user_name") String userName, @PathParam("book_id") int bookId, @Valid ReviewDTO reviewDTO) {
-        LOGGER.logThis(LogType.INFO, "User: {} Updated Review for Book: {}", userName, bookId);
+        LOGGER.log(LogType.INFO, "User: {} Updated Review for Book: {}", userName, bookId);
         if (reviewService.updateReview(userName, bookId, reviewDTO))
             return Response.ok("Review " + reviewDTO.getReviewId() + " updated by " + userName).build();
         return Response.status(Response.Status.NOT_FOUND).entity("User or Review not found").build();

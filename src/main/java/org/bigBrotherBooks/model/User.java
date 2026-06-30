@@ -47,7 +47,9 @@ public class User {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @Column
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_name"))
+    @Column(name = "role")
     private Set<String> roles;
 
     @ManyToMany
@@ -90,6 +92,7 @@ public class User {
         following = new HashSet<>();
         followedBy = new HashSet<>();
         reviews = new HashSet<>();
+        roles = new HashSet<>();
     }
 
     public String getUserName() {
@@ -272,7 +275,6 @@ public class User {
     public String toString() {
         return "User{" +
                 "userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +

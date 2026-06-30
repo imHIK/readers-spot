@@ -101,9 +101,12 @@ public class WarehouseService {
 
     @Transactional
     public boolean removeWarehouseStock(int warehouseId, StockDTO stockDTO) {
-        Stock stock = getStock(new Stock.StockId(warehouseId, stockDTO.getBookId(), stockDTO.getCondition()));
-        if (stock == null) {
+        if (stockDTO.getQuantity() <= 0) {
             return false;
+        }
+        Stock stock = getStock(new Stock.StockId(warehouseId, stockDTO.getBookId(), stockDTO.getCondition()));
+        if (stock == null || stock.getQuantity() < stockDTO.getQuantity()) {
+            return false;   // not enough stock to remove
         }
         stock.setQuantity(stock.getQuantity() - stockDTO.getQuantity());
         if (stock.getQuantity() == 0) {
@@ -124,6 +127,19 @@ public class WarehouseService {
     @Transactional
     public Stock getStock(Stock.StockId stockId) {
         return stockRepo.findById(stockId);
+    }
+
+    /**
+     * Returns the condition of any in-stock copy of the given book at the warehouse,
+     * or null if no copy is available.
+     */
+    @Transactional
+    public org.bigBrotherBooks.configModels.BookCondition pickAvailableCondition(int warehouseId, int bookId) {
+        List<Stock> available = stockRepo.findAvailable(warehouseId, bookId);
+        if (available.isEmpty()) {
+            return null;
+        }
+        return available.get(0).getStockId().getCondition();
     }
 
 

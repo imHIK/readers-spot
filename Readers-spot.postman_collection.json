@@ -1,0 +1,1374 @@
+{
+	"info": {
+		"_postman_id": "8c146082-22a3-4095-aed9-d1b1f978febf",
+		"name": "Readers-spot",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36402876"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userName\":\"test\",\n    \"password\":\"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userName\":\"test\",\n    \"password\":\"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "UserHome",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/user/home/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"home",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserAdd",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userName\": \"tengo\",\n  \"password\": \"tengo123\",\n  \"name\": \"Tengo Kawana\",\n  \"email\": \"tengo@example.com\",\n  \"phone\": \"+1234567890\",\n  \"address\": \"123 Main Street, City, Country\",\n  \"roles\": [\"USER\", \"ADMIN\"],\n  \"isDeleted\": false\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/save",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"save"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserUpdate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userName\": \"harshil\",\n  \"password\": \"password2\",\n  \"name\": \"Harshil Kapasi\",\n  \"email\": \"harshil@example.com\",\n  \"phone\": \"+1234567890\",\n  \"address\": \"123 Main Street, City, Country\",\n  \"isAdmin\": true,\n  \"isDeleted\": false\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/update",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserDelete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/johndoe",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"johndoe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserGet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/user/tengo",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"tengo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserGetDetailed",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/user/detailed/harshil",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"detailed",
+								"harshil"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UsersGet",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/list?user_names=harshil&user_names=labdhi",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"list"
+							],
+							"query": [
+								{
+									"key": "user_names",
+									"value": "harshil"
+								},
+								{
+									"key": "user_names",
+									"value": "labdhi"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserGetAll",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJyZWFkZXJzLXNwb3QtYXBwIiwidXBuIjoidGVuZ28iLCJncm91cHMiOlsiQURNSU4iLCJVU0VSIl0sImlhdCI6MTcxOTY2MDczNywiZXhwIjoxNzE5NjY0MzM3LCJqdGkiOiJiOTdmZjNjMy1jNDc1LTQ1NzMtYjI2Zi01NTk0NmRmNzZhNzQifQ.MhJmEMQ11tYfjCbDejk1R-uMoUAnPyFwXnA2Bha4PKj8uFO1im4P3C4iJJSWXCUb6nNH3N7HsuPfwBCl6fTjJKAqtZuTE5ICtA5oecFNWZd1rtFIlpP_b9dNsRNFnX6fD0bKBdDRcj9V33z0ewACul7d3CC6-g--SP1jgxWmpfc-wCLuNWIufkjwe4GL8s8d5EuCQuouXdVTgaE-l9utClXbhgx5aVls-OcLqUbB_m8EB8wy3qxu5_P6KP1tC_z_XwZAJm6cOQBvx1hw7dfzBQgMItOJkAaCNOT2jOAVx1d8ltMvhPR8eRsJvDvt8STg5wHp3KGBgnnEueQQLhpIvw",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/user/all",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserAddBook",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/user/addFavoriteBook/harshil?book_id=2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"addFavoriteBook",
+								"harshil"
+							],
+							"query": [
+								{
+									"key": "book_id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserAddAuthor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/user/addFavoriteAuthor/harshil?author_id=2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"addFavoriteAuthor",
+								"harshil"
+							],
+							"query": [
+								{
+									"key": "author_id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserGetReviews",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/reviews/harshil",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"reviews",
+								"harshil"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserFollow",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/follow/labdhi?from=harshil",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"follow",
+								"labdhi"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "harshil"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserUnfollow",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/unfollow/labdhi?from=harshil",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"unfollow",
+								"labdhi"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "harshil"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserUpdateProfile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Labdhi Kapasi\",\n    \"email\": \"labdhikapasi@example.com\",\n    \"phone\": \"+1234567890\",\n    \"address\": \"123 Main Street, City, Country\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/updateProfile/labdhi",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"updateProfile",
+								"labdhi"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "## Added endpoints\n\n- Home\n    \n- AddUser\n    \n- UpdateUser\n    \n- DeleteUser\n    \n- GetUser & GetUserDetailed\n    \n- GetUsers\n    \n- GetAllUsers\n    \n- UserAddFavoriteBook & UserRemoveFavoriteBook\n    \n- UserAddFavoriteAuthor & UserRemoveFavoriteAuthor\n    \n- GetUserReviews\n    \n- FollowUser & UnfollowUser\n    \n- UpdateProfile"
+		},
+		{
+			"name": "Book",
+			"item": [
+				{
+					"name": "BookHome",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/book/home",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"book",
+								"home"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookAdd",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"1984\",\n  \"description\": \"Big Brother is watching you.\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/book/save",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"book",
+								"save"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookUpdate",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bookId\": 2,\n    \"name\": \"The Kite Runner\",\n    \"description\": \"A book about the people. A book about sorrow. A book about a smile.\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/book/update",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"book",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookDelete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/book/{id}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"book",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookGet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/book/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"book",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookGetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/book/all",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"book",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookGetDetailed",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/book/detailed/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"book",
+								"detailed",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BookGetReviews",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/book/reviews/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"book",
+								"reviews",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "## Added Endpoints:\n\n- home\n    \n- SaveBook\n    \n- UpdateBook\n    \n- DeleteBook\n    \n- GetBook\n    \n- GetAllBooks\n    \n- GetBookDetailed\n    \n- GetBookReviews"
+		},
+		{
+			"name": "Author",
+			"item": [
+				{
+					"name": "AuthorHome",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/author/home",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"author",
+								"home"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorAdd",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"agadfgdfg\",\n  \"about\": \"dsfasfsfsf books.\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/author/save",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"author",
+								"save"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorUpdate",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"authorId\": 2,\n    \"name\": \"Khaled Hosseini\",\n    \"about\": \"He writes books about the people\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/author/update",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"author",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorDelete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/author/4",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"author",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorGet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/author/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"author",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorGetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/author/all",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"author",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorGetDetailed",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/author/detailed/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"author",
+								"detailed",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorPublish",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/author/publish/2/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"author",
+								"publish",
+								"2",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "## Added Endpoints\n\n- Home\n    \n- AddAuthor\n    \n- UpdateAuthor\n    \n- DeleteAuthor\n    \n- GetAuthor\n    \n- GetAllAuthors\n    \n- GetAuthorDetailed\n    \n- PublishBook"
+		},
+		{
+			"name": "Review",
+			"item": [
+				{
+					"name": "AddReview",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"text\": \"This is a great book but you'll have to keep patience.\",\n    \"rating\": \"FIVE\",\n    \"time\": 1612345678,\n    \"likes\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/harshil/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"harshil",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateReview",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"text\": \"This is a great book but you'll have to keep patience.\",\n    \"rating\": \"FIVE\",\n    \"time\": 1612345678,\n    \"likes\": 20\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/harshil/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"harshil",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetReview",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"text\": \"This is a great book but you'll have to keep patience.\",\n    \"rating\": \"FIVE\",\n    \"time\": 1612345678,\n    \"likes\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/harshil/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"harshil",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RemoveReview",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/harshil/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"harshil",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "- AddReview\n    \n- UpdateReview\n    \n- GetReview\n    \n- DeleteReview"
+		},
+		{
+			"name": "Warehouse",
+			"item": [
+				{
+					"name": "AddWarehouse",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Crescent\",\n    \"city\": \"New York\",\n    \"area\": \"Brooklyn\",\n    \"address\": \"374 5th Ave\",\n    \"phone\": \"+0987654321\",\n    \"email\": \"crescent@example.com\",\n    \"rating\": 4.5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/warehouse",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"warehouse"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetWarehouse",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/warehouse/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"warehouse",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateWarehouse",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"warehouseId\": 3,\n    \"name\": \"Crescent\",\n    \"city\": \"New York\",\n    \"area\": \"Brooklyn\",\n    \"address\": \"374 5th Ave\",\n    \"phone\": \"7187883434\",\n    \"email\": \"crescent@example.com\",\n    \"rating\": 4.5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/warehouse",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"warehouse"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RemoveWarehouse",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/warehouse/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"warehouse",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllWarehouses",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/warehouse/all",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"warehouse",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddBookStock",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"bookId\": 3,\n        \"condition\": \"NEW\",\n        \"quantity\": 123\n    },\n    {\n        \"bookId\": 2,\n        \"condition\": \"POOR\",\n        \"quantity\": 234\n    }\n]\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/warehouse/stock/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"warehouse",
+								"stock",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RemoveBookStock",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bookId\": 3,\n    \"condition\": \"NEW\",\n    \"quantity\": 23\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/warehouse/stock/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"warehouse",
+								"stock",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetBookStock",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/warehouse/stock/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"warehouse",
+								"stock",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "- AddWarehouse\n    \n- GetWarehouse\n    \n- UpdateWarehouse\n    \n- RemoveWarehouse\n    \n- GetAllWarehouses\n    \n- AddBookStock\n    \n- RemoveBookStock"
+		},
+		{
+			"name": "Resource",
+			"item": [
+				{
+					"name": "book",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/resource/book/9780606323451",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"resource",
+								"book",
+								"9780606323451"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "googleBookApi",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"isbn:9780606323451\",\n    \"apiKey\": \"AIzaSyD7j2VuddWGotIV_KTnKS8h2epk14gBbJc\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/resource/externalCatalog/googleBooksApi",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"resource",
+								"externalCatalog",
+								"googleBooksApi"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BOOKAPI",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer [YOUR_ACCESS_TOKEN]",
+						"disabled": true
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://books.googleapis.com/books/v1/volumes?q=isbn:9780606323451&key=AIzaSyD7j2VuddWGotIV_KTnKS8h2epk14gBbJc",
+					"protocol": "https",
+					"host": [
+						"books",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"books",
+						"v1",
+						"volumes"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "isbn:9780606323451"
+						},
+						{
+							"key": "key",
+							"value": "AIzaSyD7j2VuddWGotIV_KTnKS8h2epk14gBbJc"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{bearer_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "authToken",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"key": "baseURL",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "bearer_token",
+			"value": ""
+		}
+	]
+}

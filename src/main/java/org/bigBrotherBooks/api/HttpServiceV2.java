@@ -10,11 +10,11 @@ import org.bigBrotherBooks.logger.LoggerFactory;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @Singleton
-public class HttpService {
+public class HttpServiceV2 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HttpService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpServiceV2.class);
     @RestClient
-    HttpClient httpClient;
+    HttpClientV2 httpClient;
 
     public GoogleBooksVolumeInfo getBookById(String isbn, String key) throws Exception {
         String query = "isbn:" + isbn;

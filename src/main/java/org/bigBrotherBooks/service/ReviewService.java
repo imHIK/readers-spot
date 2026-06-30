@@ -52,6 +52,7 @@ public class ReviewService {
         review.setReviewId(new Review.ReviewId(userName, bookId));
         review.addUser(user);
         review.addBook(book);
+        reviewRepo.persist(review);
         return true;
     }
 

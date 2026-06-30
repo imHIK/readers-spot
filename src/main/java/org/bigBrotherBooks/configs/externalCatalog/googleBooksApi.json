@@ -1,0 +1,11 @@
+{
+	"httpRequest": {
+		"method": "GET",
+		"baseUrl": "https://books.googleapis.com",
+		"path": "/books/v1/volumes",
+		"queryParams": {
+			"q": "{{ query }}",
+			"key": "{{ apiKey }}"
+		}
+	}
+}

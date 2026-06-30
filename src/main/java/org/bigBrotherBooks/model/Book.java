@@ -48,7 +48,10 @@ public class Book {
     @Column(name = "rating")
     private Double rating;
 
-    @Column(name = "genres")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "book_genres", joinColumns = @JoinColumn(name = "book_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "genre")
     private List<Genre> genres;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)

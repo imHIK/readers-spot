@@ -11,6 +11,7 @@ import org.bigBrotherBooks.model.User;
 import org.bigBrotherBooks.repository.UserRepository;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.bigBrotherBooks.service.AuthService.encryptPassword;
 
@@ -109,13 +110,16 @@ public class UserService {
     @Transactional
     public boolean modifyFavoriteBook(String userName, int bookId, boolean isAdded) {
         User user = getUserById(userName);
+        if (user == null) {
+            return false;
+        }
         Book book;
         if (isAdded) {
             book = bookService.getBookById(bookId);
         } else {
             book = user.getFavoriteBooks().stream().filter(b -> b.getBookId() == bookId).findFirst().orElse(null);
         }
-        if (user == null || book == null) {
+        if (book == null) {
             return false;
         }
         if (isAdded) user.addFavoriteBook(book);       // also adds user in book-fans
@@ -126,14 +130,16 @@ public class UserService {
     @Transactional
     public boolean modifyFavoriteAuthor(String userName, int authorId, boolean isAdded) {
         User user = getUserById(userName);
+        if (user == null) {
+            return false;
+        }
         Author author;
         if (isAdded) {
             author = authorService.getAuthor(authorId);
         } else {
             author = user.getFavoriteAuthors().stream().filter(a -> a.getAuthorId() == authorId).findFirst().orElse(null);
         }
-
-        if (user == null || author == null) {
+        if (author == null) {
             return false;
         }
         if (isAdded) user.addFavoriteAuthor(author);  // also adds user in author-fans
@@ -144,19 +150,28 @@ public class UserService {
     @Transactional
     public List<ReviewDTO> getReviews(String userName) {
         User user = getUserById(userName);
+        if (user == null) {
+            return null;
+        }
         return user.getReviews().stream().map(ReviewService::mapToReviewDTO).toList();
     }
 
     @Transactional
     public boolean followUser(String userName, String followingUserName, boolean isStarting) {
+        if (userName == null || userName.equals(followingUserName)) {
+            return false;   // a user cannot follow themselves
+        }
         User user = getUserById(userName);
+        if (user == null) {
+            return false;
+        }
         User followingUser;
         if (isStarting) {
             followingUser = getUserById(followingUserName);
         } else {
             followingUser = user.getFollowing().stream().filter(u -> u.getUserName().equals(followingUserName)).findFirst().orElse(null);
         }
-        if (user == null || followingUser == null) {
+        if (followingUser == null) {
             return false;
         }
         if (isStarting) user.addFollowing(followingUser);       // also adds user in following-followers
@@ -181,18 +196,45 @@ public class UserService {
     }
 
     public static UserDTO mapToUserDTO(User user) {
-        return new UserDTO(user.getUserName(), user.getPassword(), user.getName(), user.getEmail(), user.getPhone(), user.getAddress(), user.getRoles(), user.isDeleted());
+        if (user == null) {
+            return null;
+        }
+        UserDTO dto = new UserDTO(user.getUserName(), null, user.getName(), user.getEmail(), user.getPhone(), user.getAddress(), user.getRoles(), user.isDeleted());
+        return dto;
     }
 
     private void mapToUser(UserDTO userDTO, User user) {
         user.setUserName(userDTO.getUserName());
         user.setName(userDTO.getName());
-        user.setPassword(encryptPassword(userDTO.getPassword()));
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isBlank() && !isBcryptHash(userDTO.getPassword())) {
+            user.setPassword(encryptPassword(userDTO.getPassword()));
+        }
         user.setEmail(userDTO.getEmail());
         user.setPhone(userDTO.getPhone());
         user.setAddress(userDTO.getAddress());
-        user.setRoles(userDTO.getRoles());
+        user.setRoles(sanitizeRoles(userDTO.getRoles()));
         user.setDeleted(userDTO.isDeleted());
+    }
+
+    private static final Set<String> ALLOWED_ROLES = Set.of("USER", "ADMIN");
+
+    private static Set<String> sanitizeRoles(Set<String> roles) {
+        if (roles == null || roles.isEmpty()) {
+            return Set.of("USER");
+        }
+        Set<String> sanitized = roles.stream()
+                .filter(java.util.Objects::nonNull)
+                .map(role -> role.trim().toUpperCase())
+                .filter(ALLOWED_ROLES::contains)
+                .collect(java.util.stream.Collectors.toCollection(java.util.HashSet::new));
+        if (sanitized.isEmpty()) {
+            sanitized.add("USER");
+        }
+        return sanitized;
+    }
+
+    private static boolean isBcryptHash(String value) {
+        return value.startsWith("$2a$") || value.startsWith("$2b$") || value.startsWith("$2y$");
     }
 
 }

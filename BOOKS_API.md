@@ -20,7 +20,8 @@ curl -X GET "https://www.googleapis.com/books/v1/volumes?q=intitle:the%20shining
 
 - here we have used **Api Key** for connecting to the google books api. you can get your own api key by following the
   link below.
-- any user using this project must set their own api key in the `application.properties` file.
+- any user using this project must set their own api key in `application.properties` (copy from `application.properties.example`).
+- Google Books lookup by ISBN is available at `GET /catalog/book/{isbn}`.
 - The request by title returns multiple books with similar titles, so its better to use isbn or other params given in
   the docs.
 
